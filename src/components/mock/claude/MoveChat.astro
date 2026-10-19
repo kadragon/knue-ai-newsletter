@@ -1,0 +1,34 @@
+---
+// verified-against: live claude.ai chat title menu + "프로젝트에 추가" submenu (Korean UI), 2026-10-19
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+const icon = 'h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.5]';
+const item = 'flex items-center gap-2.5 rounded-lg px-2 py-1.5';
+---
+<Frame tone="claude" caption="① 채팅 제목 옆 ⌄ → ② 프로젝트에 추가 → ③ 옮길 프로젝트 선택">
+  <div class="h-64 bg-[#faf9f5] p-5 text-[#141413]">
+    <div class="flex items-center gap-1">
+      <span>루브릭 초안 검토</span>
+      <Hl n={1} label="⌄ (채팅 제목 메뉴)" class="inline-block"><span class="block rounded-md px-1.5 py-0.5 text-[#3d3d3a]">⌄</span></Hl>
+    </div>
+    <div class="mt-2 flex items-start gap-1.5">
+      <div class="w-44 rounded-xl border border-[#1f1e1d]/15 bg-white p-1 shadow-lg">
+        <p class={item}><svg viewBox="0 0 16 16" class={icon}><path d="M9.5 2.5 13.5 6.5 11 7.5 8.5 10l-.5 3-5-5 3-.5L8.5 5z M5.5 10.5l-3 3" /></svg><span class="flex-1">고정</span><span class="text-xs text-[#73726c]">P</span></p>
+        <p class={item}><svg viewBox="0 0 16 16" class={icon}><path d="m3 13 1-3.5L11 2.5 13.5 5l-7 7z" /></svg><span class="flex-1">이름 변경</span><span class="text-xs text-[#73726c]">R</span></p>
+        <Hl n={2}><p class={`${item} bg-[#1f1e1d]/[0.06]`}><svg viewBox="0 0 16 16" class={icon}><path d="M3 6.5h10v6.5H3zM4 4.5h8M5 2.5h6" /></svg><span class="flex-1">프로젝트에 추가</span><span class="text-[#73726c]">›</span></p></Hl>
+        <p class={item}><svg viewBox="0 0 16 16" class={icon}><path d="M8 10V2.5M5 5.5l3-3 3 3M3 9v4.5h10V9" /></svg><span class="flex-1">세션 공유</span></p>
+        <div class="mx-2 my-1 border-t border-[#1f1e1d]/10"></div>
+        <p class={`${item} text-[#b53333]`}><svg viewBox="0 0 16 16" class={icon}><path d="M3 4.5h10M6 4.5v-2h4v2M4.5 4.5l.7 9h5.6l.7-9" /></svg><span class="flex-1">삭제</span><span class="text-xs text-[#73726c]">D</span></p>
+      </div>
+      <div class="mt-16 w-52 rounded-xl border border-[#1f1e1d]/15 bg-white shadow-lg">
+        <p class="border-b border-[#1f1e1d]/10 px-3 py-2 text-[#73726c]">프로젝트 검색 또는 생성</p>
+        <div class="p-1">
+          <p class="flex items-center gap-2 rounded-lg px-2 py-1.5"><span class="w-4 text-center">+</span>새 프로젝트</p>
+          <div class="mx-2 my-1 border-t border-[#1f1e1d]/10"></div>
+          <Hl n={3}><p class="rounded-lg bg-[#1f1e1d]/[0.06] px-2 py-1.5">2026-2 교육평가</p></Hl>
+          <p class="px-2 py-1.5">연구 노트</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Frame>

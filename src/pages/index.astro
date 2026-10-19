@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/site';
+---
+<Base title="홈">
+  <h1 class="text-3xl font-bold leading-snug">어떤 AI를 쓰고 계신가요?</h1>
+  <p class="mt-3 text-stone-600">사용하시는 도구에 맞춘 안내만 모아 보여 드립니다.</p>
+  <div class="mt-8 grid gap-4 sm:grid-cols-2">
+    <a href={url('chatgpt/')} class="rounded-2xl border-2 border-chatgpt/30 bg-white p-6 hover:border-chatgpt">
+      <p class="text-2xl font-bold text-chatgpt">ChatGPT</p>
+      <p class="mt-2 text-sm text-stone-600">OpenAI ChatGPT 사용 교수자용</p>
+    </a>
+    <a href={url('claude/')} class="rounded-2xl border-2 border-claude/30 bg-white p-6 hover:border-claude">
+      <p class="text-2xl font-bold text-claude">Claude</p>
+      <p class="mt-2 text-sm text-stone-600">Anthropic Claude 사용 교수자용</p>
+    </a>
+  </div>
+</Base>

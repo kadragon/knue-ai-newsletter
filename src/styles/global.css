@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --color-ink: #1b2430;
+  --color-chatgpt: #0f7b5f;
+  --color-claude: #c2562f;
+}
+
+body { @apply bg-stone-50 text-ink antialiased; word-break: keep-all; }
+
+/* Mockup highlights. Static by default; <Walkthrough> adds .wt-live and toggles .wt-on per step. */
+.hl { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-amber-500); transition: box-shadow .3s, opacity .3s; }
+.wt-live .hl:not(.wt-on) { box-shadow: none; }
+.wt-live .hl:not(.wt-on) > .hl-badge { opacity: 0; transform: scale(.4); }
+.hl-badge { transition: opacity .25s, transform .25s; }
+.wt-live .hl.wt-now { animation: wt-pulse 1.2s ease-out 2; }
+@keyframes wt-pulse { 0% { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-amber-500), 0 0 0 4px rgb(245 158 11 / .5); }
+  100% { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-amber-500), 0 0 0 14px rgb(245 158 11 / 0); } }
+.wt-cursor { transition: transform .7s cubic-bezier(.4,0,.2,1), opacity .3s; }
+.wt-ripple { animation: wt-ripple .5s ease-out forwards; }
+@keyframes wt-ripple { from { transform: translate(-50%,-50%) scale(.2); opacity: .8; } to { transform: translate(-50%,-50%) scale(1.6); opacity: 0; } }
+.wt-caret::after { content: '|'; margin-left: 1px; animation: wt-blink .8s steps(1) infinite; }
+@keyframes wt-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .wt-cursor, .hl, .hl-badge { transition: none; } .wt-live .hl.wt-now { animation: none; } }

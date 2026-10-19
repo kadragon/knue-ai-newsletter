@@ -1,0 +1,28 @@
+---
+/** Claude-style sidebar (light theme). */
+// verified-against: live claude.ai (Korean UI, org account, dark mode; light colors from the app's light-theme tokens), 2026-10-19
+import Hl from '../Hl.astro';
+interface Props { highlight?: 'projects' }
+const { highlight } = Astro.props;
+const icon = 'h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.5]';
+---
+<aside class="w-48 shrink-0 space-y-0.5 border-r border-[#1f1e1d]/10 bg-[#f5f4ed] p-2 text-[13px] text-[#3d3d3a]">
+  <p class="mb-1.5 flex items-center gap-2 rounded-lg border border-[#1f1e1d]/10 bg-white/60 px-2 py-1 text-[#73726c]">
+    <svg viewBox="0 0 16 16" class={icon}><circle cx="7" cy="7" r="4.5" /><path d="m10.5 10.5 3 3" /></svg>검색
+  </p>
+  <p class="flex items-center gap-2 rounded-lg px-2 py-1.5">
+    <span class="flex h-4 w-4 items-center justify-center rounded-full bg-[#1f1e1d]/10 text-[11px] leading-none">+</span>새로 생성
+  </p>
+  {highlight === 'projects'
+    ? <Hl n={1}><p class="flex items-center gap-2 rounded-lg bg-[#1f1e1d]/[0.07] px-2 py-1.5 font-medium text-[#141413]"><svg viewBox="0 0 16 16" class={icon}><path d="M3 6.5h10v6.5H3zM4 4.5h8M5 2.5h6" /></svg>프로젝트</p></Hl>
+    : <p class="flex items-center gap-2 rounded-lg px-2 py-1.5"><svg viewBox="0 0 16 16" class={icon}><path d="M3 6.5h10v6.5H3zM4 4.5h8M5 2.5h6" /></svg>프로젝트</p>}
+  <p class="flex items-center gap-2 rounded-lg px-2 py-1.5">
+    <svg viewBox="0 0 16 16" class={icon}><circle cx="5" cy="11" r="2.5" /><path d="M8 2.5 11 8H5z" /><rect x="9.5" y="8.5" width="4.5" height="4.5" rx="1" /></svg>아티팩트
+  </p>
+  <p class="flex items-center gap-2 rounded-lg px-2 py-1.5">
+    <svg viewBox="0 0 16 16" class={icon}><rect x="2.5" y="5" width="11" height="8" rx="1.5" /><path d="M6 5V3.5h4V5M2.5 8.5h11" /></svg>사용자 지정
+  </p>
+  <p class="px-2 pt-3 text-[11px] text-[#73726c]">최근 항목</p>
+  <p class="truncate rounded-lg px-2 py-1">루브릭 초안 검토</p>
+  <p class="truncate rounded-lg px-2 py-1">학회 발표 요약</p>
+</aside>

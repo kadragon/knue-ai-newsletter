@@ -1,0 +1,167 @@
+---
+/**
+ * Auto-playing walkthrough over one or more mockup Frames: a fake cursor visits each <Hl> in
+ * badge order, clicks, and types `type` fields. Without JS (or with reduced motion) the static
+ * mockups show every highlight at once.
+ */
+interface Props { title?: string }
+const { title = '따라 하기' } = Astro.props;
+---
+<div class="wt not-prose relative my-6" data-wt>
+  <div class="mb-1 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-amber-50 px-3 py-2 text-sm">
+    <span class="font-semibold text-amber-900">▶ {title}</span>
+    <span class="flex items-center gap-1" data-wt-controls hidden>
+      <button type="button" class="rounded-md px-2 py-1 hover:bg-amber-100" data-wt-prev aria-label="이전 단계">◀</button>
+      <span class="min-w-14 text-center tabular-nums text-amber-900" data-wt-count>0 / 0</span>
+      <button type="button" class="rounded-md px-2 py-1 hover:bg-amber-100" data-wt-next aria-label="다음 단계">▶</button>
+      <button type="button" class="ml-1 rounded-md bg-amber-500 px-3 py-1 font-medium text-white hover:bg-amber-600" data-wt-play>일시정지</button>
+    </span>
+  </div>
+  <div class="relative" data-wt-stage>
+    <slot />
+    <div class="wt-cursor pointer-events-none absolute left-0 top-0 z-20 opacity-0" data-wt-cursor aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#1b2430" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+  <p class="mt-1 min-h-5 text-sm font-medium text-amber-900" data-wt-say aria-live="polite"></p>
+</div>
+
+<script>
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  class Walkthrough {
+    root: HTMLElement; stage: HTMLElement; cursor: HTMLElement; say: HTMLElement;
+    count: HTMLElement; playBtn: HTMLButtonElement;
+    steps: HTMLElement[]; texts: Map<HTMLElement, { node: Text; text: string }>;
+    i = -1; playing = false; run = 0;
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      this.stage = root.querySelector('[data-wt-stage]')!;
+      this.cursor = root.querySelector('[data-wt-cursor]')!;
+      this.say = root.querySelector('[data-wt-say]')!;
+      this.count = root.querySelector('[data-wt-count]')!;
+      this.playBtn = root.querySelector('[data-wt-play]')!;
+      // Frames in document order; within a frame, badge number order.
+      this.steps = [...root.querySelectorAll<HTMLElement>('figure')].flatMap((f) =>
+        [...f.querySelectorAll<HTMLElement>('[data-hl]')].sort((x, y) => +x.dataset.hl! - +y.dataset.hl!));
+      this.texts = new Map();
+      for (const el of this.steps.filter((s) => s.hasAttribute('data-type'))) {
+        const node = firstText(el);
+        if (node) this.texts.set(el, { node, text: node.data });
+      }
+      root.querySelector('[data-wt-controls]')!.removeAttribute('hidden');
+      root.classList.add('wt-live');
+      root.querySelector('[data-wt-prev]')!.addEventListener('click', () => this.jump(this.i - 1));
+      root.querySelector('[data-wt-next]')!.addEventListener('click', () => this.jump(this.i + 1));
+      this.playBtn.addEventListener('click', () => (this.playing ? this.pause() : this.play()));
+      this.render();
+    }
+
+    render() {
+      this.steps.forEach((s, k) => {
+        s.classList.toggle('wt-on', k <= this.i);
+        s.classList.toggle('wt-now', k === this.i);
+      });
+      this.count.textContent = `${Math.max(this.i + 1, 0)} / ${this.steps.length}`;
+      this.playBtn.textContent = this.playing ? '일시정지' : this.i >= this.steps.length - 1 ? '다시 보기' : '재생';
+      for (const [el, t] of this.texts) {
+        const k = this.steps.indexOf(el);
+        if (k > this.i) t.node.data = '';
+        else if (k < this.i || !this.playing) t.node.data = t.text;
+      }
+    }
+
+    async moveTo(el: HTMLElement) {
+      const s = this.stage.getBoundingClientRect(), r = el.getBoundingClientRect();
+      const x = r.left - s.left + Math.min(r.width * 0.5, 60), y = r.top - s.top + r.height * 0.6;
+      this.cursor.style.opacity = '1';
+      this.cursor.style.transform = `translate(${x}px, ${y}px)`;
+      await sleep(750);
+      const dot = document.createElement('span');
+      dot.className = 'wt-ripple pointer-events-none absolute z-20 h-8 w-8 rounded-full bg-amber-400';
+      dot.style.left = `${x + 4}px`; dot.style.top = `${y + 4}px`;
+      this.stage.appendChild(dot);
+      setTimeout(() => dot.remove(), 600);
+    }
+
+    async type(el: HTMLElement, token: number) {
+      const t = this.texts.get(el);
+      if (!t) return;
+      const holder = t.node.parentElement!;
+      t.node.data = '';
+      holder.classList.add('wt-caret');
+      const chars = [...t.text], step = Math.max(18, Math.min(45, 1800 / chars.length));
+      for (const c of chars) {
+        if (token !== this.run) break;
+        t.node.data += c;
+        await sleep(step);
+      }
+      t.node.data = t.text;
+      holder.classList.remove('wt-caret');
+    }
+
+    caption(el: HTMLElement) {
+      const label = (el.dataset.label || this.texts.get(el)?.text || firstText(el)?.data || '').trim().slice(0, 30);
+      return `${el.dataset.hl}. ${el.hasAttribute('data-type') ? `‘${label}’ 입력` : `‘${label}’ 클릭`}`;
+    }
+
+    async play() {
+      if (this.i >= this.steps.length - 1) this.i = -1;
+      this.playing = true;
+      const token = ++this.run;
+      this.render();
+      while (this.playing && token === this.run && this.i < this.steps.length - 1) {
+        this.i++;
+        const el = this.steps[this.i];
+        this.render();
+        // Only scroll the frame horizontally (narrow screens); never move the page under the reader.
+        const box = el.closest<HTMLElement>('.overflow-x-auto');
+        if (box) {
+          const br = box.getBoundingClientRect(), er = el.getBoundingClientRect();
+          if (er.left < br.left || er.right > br.right) box.scrollLeft += er.left - br.left - 24;
+        }
+        this.say.textContent = this.caption(el);
+        await this.moveTo(el);
+        if (token !== this.run) return;
+        await this.type(el, token);
+        await sleep(900);
+      }
+      if (token === this.run) { this.playing = false; this.render(); }
+    }
+
+    pause() { this.playing = false; this.run++; this.render(); }
+
+    jump(k: number) {
+      this.pause();
+      this.i = Math.max(-1, Math.min(this.steps.length - 1, k));
+      this.render();
+      const el = this.steps[this.i];
+      if (el) { this.say.textContent = this.caption(el); this.moveTo(el); }
+      else { this.say.textContent = ''; this.cursor.style.opacity = '0'; }
+    }
+  }
+
+  function firstText(el: HTMLElement): Text | null {
+    // The visible label text, skipping the numbered badge. Typing edits this node only, so
+    // sibling icons survive.
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode() as Text | null; n; n = walker.nextNode() as Text | null) {
+      if (n.data.trim() && !n.parentElement!.closest('.hl-badge')) return n;
+    }
+    return null;
+  }
+
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) {
+        io.unobserve(e.target);
+        (e.target as any).__wt?.play();
+      }
+    }, { threshold: 0.5 });
+    document.querySelectorAll<HTMLElement>('[data-wt]').forEach((root) => {
+      (root as any).__wt = new Walkthrough(root);
+      io.observe(root);
+    });
+  }
+</script>

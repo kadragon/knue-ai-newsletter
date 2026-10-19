@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+.env.production
+.DS_Store
+.playwright-mcp/
+# Private UI reference screenshots (may show personal account data)
+ui-reference/

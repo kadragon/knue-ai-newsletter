@@ -1,0 +1,14 @@
+---
+/**
+ * Highlights the element a step tells the reader to click, with a numbered badge.
+ * Inside a <Walkthrough>, highlights reveal one at a time; `type` makes the walkthrough
+ * re-type the element's text as if the user were entering it. `label` names icon-only targets
+ * in the walkthrough caption.
+ */
+interface Props { n: number; class?: string; type?: boolean; label?: string }
+const { n, class: cls = '', type = false, label } = Astro.props;
+---
+<span class={`hl relative block rounded-md ${cls}`} data-hl={n} data-type={type ? '' : undefined} data-label={label}>
+  <slot />
+  <span class="hl-badge absolute -right-3 -top-3 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 text-xs font-bold text-white shadow">{n}</span>
+</span>

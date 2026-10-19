@@ -1,0 +1,32 @@
+---
+// verified-against: live chatgpt.com (Korean UI, workspace account) via Chrome, 2026-10-19
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+import Icon from './Icon.astro';
+import Sidebar from './Sidebar.astro';
+---
+<Frame caption="① 사이드바 '프로젝트' 옆 ＋ → ② 이름 입력 → ③ 프로젝트 만들기">
+  <div class="flex h-80">
+    <Sidebar highlight="new-project" />
+    <div class="flex flex-1 items-center justify-center bg-black/25 p-4">
+      <div class="w-full max-w-[320px] rounded-2xl bg-white p-4 text-[#0d0d0d] shadow-xl">
+        <div class="flex items-center justify-between">
+          <p class="text-[17px]">프로젝트 만들기</p>
+          <Icon name="close" class="h-4 w-4 text-[#5d5d5d]" />
+        </div>
+        <p class="mt-3">프로젝트 이름</p>
+        <Hl n={2} type class="mt-1.5">
+          <p class="flex items-center gap-2 rounded-lg border border-[#3a83f7] px-2.5 py-2"><Icon name="folder" class="h-4 w-4 text-[#5d5d5d]" />2026-2 교육평가</p>
+        </Hl>
+        <p class="mt-3 flex gap-2 rounded-lg bg-[#f3f3f3] px-2.5 py-2 text-[11px] leading-snug text-[#5d5d5d]">
+          <Icon name="bulb" class="mt-0.5 h-4 w-4" />
+          <span>프로젝트는 채팅, 파일, 사용자 지정 지침을 한 자리에 모아 둡니다.</span>
+        </p>
+        <div class="mt-4 flex items-center justify-between">
+          <span class="flex items-center gap-1 rounded-full px-2 py-1.5">기본 메모리 <Icon name="chevron" class="h-3 w-3" /></span>
+          <Hl n={3} class="inline-block !rounded-full"><span class="block rounded-full bg-[#0d0d0d] px-3.5 py-1.5 font-medium text-white">프로젝트 만들기</span></Hl>
+        </div>
+      </div>
+    </div>
+  </div>
+</Frame>

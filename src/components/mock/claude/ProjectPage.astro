@@ -1,0 +1,72 @@
+---
+/** Claude project page; `focus` picks which right-panel control to highlight. */
+// verified-against: live claude.ai project page, viewer (non-owner) view of a shared example project, Korean UI, 2026-10-19.
+// Layout, breadcrumb, composer, "최근 항목", and the 파일/메모리/예정됨 rows are from that view.
+// The owner-only 지침 row, the files "+" menu, and the instructions editor were NOT visible there (unverified).
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+interface Props { focus: 'instructions' | 'knowledge' }
+const { focus } = Astro.props;
+const caption = focus === 'instructions'
+  ? '① 오른쪽 프로젝트 지침 설정 → ② 지침 입력 → ③ 지침 저장'
+  : '① 오른쪽 파일 옆 + → ② 파일 업로드 또는 Google Drive 선택';
+const icon = 'h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.5] text-[#3d3d3a]';
+const row = 'flex items-center gap-2 border-b border-[#1f1e1d]/10 py-2.5';
+---
+<Frame tone="claude" caption={caption}>
+  <div class="bg-[#faf9f5] text-[#141413]">
+    <p class="px-5 pt-3 text-[13px] text-[#3d3d3a]">프로젝트 <span class="text-[#73726c]">/</span> 2026-2 교육평가 ⌄</p>
+    <div class="flex gap-5 px-5 pb-5">
+      <div class="min-w-0 flex-1 pt-3">
+        <p class="font-serif text-2xl font-medium">2026-2 교육평가</p>
+        <p class="mt-1 text-[13px] text-[#3d3d3a]">3학년 과제 피드백용</p>
+        <div class="mt-4 rounded-2xl border border-[#1f1e1d]/15 bg-white px-4 pb-2 pt-3 shadow-sm">
+          <p class="text-[#73726c]">2026-2 교육평가의 새 세션</p>
+          <p class="mt-4 text-lg leading-none text-[#3d3d3a]">+</p>
+        </div>
+        <p class="mt-5 text-[13px] text-[#73726c]">최근 항목</p>
+        <p class="mt-2 flex justify-between"><span>1주차 과제 피드백</span><span class="text-xs text-[#73726c]">2일 전</span></p>
+      </div>
+      <div class="w-56 shrink-0 pt-9 text-[13px]">
+        <div class={row}>
+          <svg viewBox="0 0 16 16" class={icon}><path d="M3 2.5h7l3 3v8H3zM5.5 7h5M5.5 9.5h5" /></svg>
+          {focus === 'instructions'
+            ? <Hl n={1} class="flex-1"><span class="block px-1">프로젝트 지침 설정</span></Hl>
+            : <><span>지침</span><span class="flex-1 truncate text-xs text-[#73726c]">너는 「교육평가」…</span></>}
+        </div>
+        <div class={`relative ${row}`}>
+          <svg viewBox="0 0 16 16" class={icon}><rect x="5" y="2.5" width="8.5" height="10" rx="1.5" /><path d="M3 5v8.5h7.5" /></svg>
+          <span>파일</span>
+          <span class="flex-1 text-xs text-[#73726c]">{focus === 'knowledge' ? '파일 0개' : '파일 1개'}</span>
+          {focus === 'knowledge'
+            ? <Hl n={1} label="+ (파일 추가)" class="inline-block"><span class="block px-1.5 text-base leading-none">+</span></Hl>
+            : <span class="px-1.5 text-base leading-none">+</span>}
+        </div>
+        {focus === 'knowledge' && (
+          <div class="-mt-1 mb-1 ml-auto w-44 rounded-xl border border-[#1f1e1d]/15 bg-white p-1 shadow-lg">
+            <Hl n={2}><p class="rounded-lg bg-[#1f1e1d]/[0.06] px-2 py-1.5">기기에서 업로드</p></Hl>
+            <p class="px-2 py-1.5 text-[#3d3d3a]">텍스트 콘텐츠 추가</p>
+            <p class="px-2 py-1.5 text-[#3d3d3a]">Google Drive</p>
+          </div>
+        )}
+        <div class={row}>
+          <svg viewBox="0 0 16 16" class={icon}><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.5H5" /></svg>
+          <span class="flex-1">메모리</span><span>보기</span>
+        </div>
+        <div class={row}>
+          <svg viewBox="0 0 16 16" class={icon}><circle cx="8" cy="8" r="5.5" /><path d="M8 5v3l2 1.5" /></svg>
+          <span class="flex-1">예정됨</span><span>추가</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {focus === 'instructions' && (
+    <div class="border-t border-[#1f1e1d]/10 bg-white p-5 text-[#141413]">
+      <p class="text-lg font-semibold">프로젝트 지침 설정</p>
+      <Hl n={2} type class="mt-3"><p class="h-20 rounded-lg border border-[#1f1e1d]/20 bg-white px-3 py-2 text-[#3d3d3a]">너는 「교육평가」 과목의 조교다. 첨부한 강의계획서와 루브릭을 기준으로 답한다…</p></Hl>
+      <div class="mt-4 flex justify-end gap-2">
+        <Hl n={3} class="inline-block"><span class="block rounded-lg bg-[#141413] px-3 py-1.5 font-medium text-white">지침 저장</span></Hl>
+      </div>
+    </div>
+  )}
+</Frame>

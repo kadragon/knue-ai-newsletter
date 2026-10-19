@@ -1,0 +1,38 @@
+---
+// verified-against: live chatgpt.com (Korean UI, workspace account) via Chrome, 2026-10-19
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+import Icon from './Icon.astro';
+---
+<Frame caption="① 프로젝트 화면의 소스 탭 → ② 소스 추가 → ③ 업로드 (파일을 끌어다 놓아도 됨)">
+  <div class="relative h-[22rem] px-6 py-5 text-[#0d0d0d]">
+    <div class="flex items-center justify-between">
+      <p class="flex items-center gap-2 text-lg"><Icon name="folder" class="h-5 w-5" />2026-2 교육평가</p>
+      <span class="flex items-center gap-2">
+        <span class="flex items-center gap-1 rounded-full border border-[#e5e5e5] px-2.5 py-1"><Icon name="share" class="h-3.5 w-3.5" />공유</span>
+        <span class="flex h-7 w-7 items-center justify-center rounded-full border border-[#e5e5e5]"><Icon name="dots" /></span>
+      </span>
+    </div>
+    <p class="mt-3 flex items-center gap-3 rounded-3xl bg-[#f3f3f3] px-4 py-2.5 text-[#8f8f8f]"><Icon name="plus" />2026-2 교육평가의 새 채팅</p>
+    <div class="mt-3 flex gap-1">
+      <span class="rounded-full px-3 py-1.5">채팅</span>
+      <Hl n={1} class="inline-block !rounded-full"><span class="block rounded-full bg-[#ececec] px-3 py-1.5">소스</span></Hl>
+    </div>
+    <div class="mt-2 flex h-36 flex-col items-center justify-center rounded-xl border border-dashed border-[#d0d0d0] text-center">
+      <p class="font-medium">ChatGPT에 더 많은 컨텍스트 제공하기</p>
+      <p class="mt-1 text-[12px] text-[#5d5d5d]">소스를 추가해 ChatGPT가 프로젝트를 더 깊이 이해하도록 하세요</p>
+      <Hl n={2} class="mt-3 inline-block !rounded-full"><span class="block rounded-full border border-[#e5e5e5] bg-white px-3 py-1 text-[12px] shadow-sm">소스 추가</span></Hl>
+    </div>
+    <div class="absolute bottom-3 right-4 w-60 rounded-2xl border border-[#e5e5e5] bg-white p-3 shadow-xl">
+      <div class="flex items-center justify-between">
+        <p class="text-[14px]">소스 추가</p>
+        <Icon name="close" class="h-3.5 w-3.5 text-[#5d5d5d]" />
+      </div>
+      <p class="mt-2 rounded-lg border border-dashed border-[#d0d0d0] py-3 text-center text-[11px] text-[#5d5d5d]">여기에 소스를 끌어다 놓으세요</p>
+      <div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-[11px]">
+        <Hl n={3}><span class="flex flex-col items-center gap-0.5 rounded-lg bg-[#f3f3f3] py-1.5"><Icon name="upload" class="h-3.5 w-3.5" />업로드</span></Hl>
+        <span class="flex flex-col items-center gap-0.5 rounded-lg bg-[#f3f3f3] py-1.5 text-[#5d5d5d]"><Icon name="edit" class="h-3.5 w-3.5" />텍스트 붙여넣기</span>
+      </div>
+    </div>
+  </div>
+</Frame>

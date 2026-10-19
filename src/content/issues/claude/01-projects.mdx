@@ -1,0 +1,127 @@
+---
+tool: claude
+vol: 1
+year: 2026
+title: "Claude 프로젝트로 강의별 AI 작업실 만들기"
+description: "강의계획서와 루브릭을 프로젝트 지식에 넣어 두면, 그 프로젝트의 모든 대화가 같은 자료로 답합니다."
+emailIntro: "매번 강의계획서를 다시 붙여 넣고 같은 설명을 반복하고 계신가요? Claude의 '프로젝트' 기능을 쓰면 강의마다 자료와 지침을 한 번만 넣어 두고 계속 이어서 쓸 수 있습니다. 3단계 설정법과 바로 복사해 쓰는 지침 예시를 준비했습니다."
+lastVerified: 2026-10-19
+sources:
+  - https://support.claude.com/en/articles/9519177
+  - https://support.claude.com/en/articles/9517075
+  - https://support.claude.com/en/articles/9519189
+  - https://support.claude.com/en/articles/11473015
+  - https://support.claude.com/en/articles/8241126
+  - https://support.claude.com/en/articles/10166901
+  - https://support.claude.com/ko/articles/9519177
+  - https://privacy.claude.com/en/articles/12109829-how-do-i-change-my-model-improvement-privacy-settings
+---
+
+import Step from '../../../components/mock/Step.astro';
+import NewProject from '../../../components/mock/claude/NewProject.astro';
+import ProjectPage from '../../../components/mock/claude/ProjectPage.astro';
+import MoveChat from '../../../components/mock/claude/MoveChat.astro';
+import Walkthrough from '../../../components/mock/Walkthrough.astro';
+import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
+
+{/* TODO(verify): Checked against live Korean claude.ai on 2026-10-19 (sidebar, projects page, create dialog, project page viewer view, chat title menu). Still unverified (owner-only, not visible without creating a project): the 지침 row label "프로젝트 지침 설정", the instructions editor and "지침 저장" button, the files "+" control and its menu ("기기에서 업로드", "텍스트 콘텐츠 추가", "Google Drive"). */}
+
+## 한 줄 요약
+
+**프로젝트는 자료(프로젝트 지식)와 지침을 담아 두는 작업 공간입니다.** 프로젝트 안에서 시작하는 대화는 모두 같은 자료와 지침에 따라 답합니다.
+
+## 일반 대화와 무엇이 다른가요?
+
+| | 일반 대화 | 프로젝트 |
+|---|---|---|
+| 자료 | 대화할 때마다 다시 올림 | 프로젝트 지식에 한 번 올리면 모든 대화에서 사용 |
+| 지침 | 매번 "이렇게 답해 줘"라고 다시 입력 | 프로젝트 지침으로 한 번만 설정 |
+| 정리 | 대화 목록에 섞임 | 강의·연구별로 묶임 |
+
+주의할 점이 하나 있습니다. **같은 프로젝트 안이라도 대화끼리는 내용이 이어지지 않습니다.** 여러 대화에서 함께 써야 하는 내용은 프로젝트 지식에 넣어 두세요. 또한 Claude는 프로젝트 이름과 설명을 읽지 않으므로, 원하는 내용은 지침에 적어야 합니다.
+
+## 3단계로 시작하기
+
+### 1단계. 프로젝트 만들기
+
+왼쪽 사이드바에서 <Step n={1} /> **프로젝트**를 누르고 오른쪽 위 <Step n={2} /> **새 프로젝트**를 누릅니다.
+
+<Walkthrough title="1단계 따라 하기">
+  <NewProject />
+</Walkthrough>
+
+<Step n={3} /> **무엇을 작업 중이신가요?** 칸에 `2026-2 교육평가`처럼 학기와 과목을 함께 적고 <Step n={4} /> **프로젝트 생성**을 누릅니다. 아래 목표 설명 칸은 Claude가 읽지 않으니 메모용으로만 쓰세요. 학교(조직) 계정에서는 **공개 범위** 선택도 보이는데, 기본값인 **비공개**로 두면 됩니다.
+
+### 2단계. 지침 넣기
+
+프로젝트 화면 오른쪽에서 <Step n={1} /> **프로젝트 지침 설정**을 누르고 <Step n={2} /> 아래 [추천 활용법](#교수님께-추천하는-활용법)의 예시를 붙여 넣어 고친 뒤 <Step n={3} /> **지침 저장**을 누릅니다.
+
+<Walkthrough title="2단계 따라 하기">
+  <ProjectPage focus="instructions" />
+</Walkthrough>
+
+### 3단계. 자료 올리기
+
+오른쪽 파일 영역의 <Step n={1} /> **+** 를 누르고 <Step n={2} /> 컴퓨터에 있는 강의계획서, 루브릭 파일을 올립니다. **Google Drive**를 고르면 드라이브 문서를 연결할 수 있고, 연결한 문서는 최신 내용으로 자동 갱신됩니다.
+
+<Walkthrough title="3단계 따라 하기">
+  <ProjectPage focus="knowledge" />
+</Walkthrough>
+
+### 덤. 기존 채팅 옮기기
+
+채팅 화면 위쪽 <Step n={1} /> 제목 옆 <strong>⌄</strong>를 누르고 <Step n={2} /> **프로젝트에 추가**에 마우스를 올린 뒤 <Step n={3} /> 옮길 프로젝트를 고릅니다.
+
+<Walkthrough title="채팅 옮기기 따라 하기">
+  <MoveChat />
+</Walkthrough>
+
+## 교수님께 추천하는 활용법
+
+아래 도구로 내 강의에 맞는 지침을 바로 만들어 복사할 수 있습니다. 예시를 그대로 복사해 고쳐 써도 됩니다.
+
+<InstructionBuilder client:visible />
+
+### 1. 강의별 프로젝트
+
+**올릴 자료**: 강의계획서, 평가 루브릭, 주차별 강의 자료
+
+```text
+너는 「교육평가」 과목의 조교다. 첨부한 강의계획서와 루브릭을 기준으로 답한다.
+과제 피드백은 강점 2개, 개선점 2개, 루브릭 항목별 점수 근거 순서로 쓰고 격려하는 존댓말을 쓴다.
+자료에 없는 내용은 "자료에 없음"이라고 밝힌다.
+```
+
+### 2. 연구 프로젝트
+
+**올릴 자료**: 핵심 논문 PDF, 연구 노트
+
+```text
+업로드한 논문만 근거로 답하고 주장마다 (저자, 연도, 쪽) 형식으로 출처를 단다.
+논문끼리 결과가 상충하면 따로 표시한다. 추측과 근거를 구분해서 쓴다.
+```
+
+### 3. 위원회·행정 업무 프로젝트
+
+**올릴 자료**: 학칙, 관련 지침, 지난 회의록
+
+```text
+첨부한 학칙과 지침을 근거로 검토 의견을 개조식으로 쓴다. 관련 조항 번호를 반드시 적고,
+판단이 불확실하면 "담당 부서 확인 필요"라고 표시한다.
+```
+
+## 꼭 지켜 주세요: 학생 개인정보
+
+- **이름, 학번, 연락처, 성적이 들어간 파일은 올리지 마세요.** 꼭 필요하면 `학생A`처럼 가명으로 바꾼 뒤 올립니다.
+- **개인 계정이라면 학습 사용 설정을 확인하세요.** Settings → Privacy → **Help improve our AI models** 토글을 끄면 대화가 모델 학습에 쓰이지 않습니다.
+- **학생 과제를 올려도 되는지 애매하면** 먼저 학내 개인정보 담당 부서에 확인해 주세요.
+
+## 알아 두면 좋은 점
+
+- **무료 플랜은 프로젝트를 5개까지** 만들 수 있습니다.
+- **파일은 한 개당 30MB까지** 올릴 수 있습니다. PDF, Word(DOCX), 텍스트, CSV 등을 지원합니다.
+- **자료가 많으면 필요한 부분만 찾아 읽습니다.** 유료 플랜에서는 자료가 많아지면 자동으로 검색 방식으로 바뀌어 더 많은 자료를 넣을 수 있습니다. 다만 매번 전체를 읽지는 않습니다. 중요한 답변은 원문과 대조해 확인하세요.
+- **스캔한 PDF보다 텍스트가 살아 있는 파일이 좋습니다.**
+- **화면이 다르게 보일 수 있습니다.** Anthropic이 새 버전 프로젝트를 일부 사용자에게 순차 적용하고 있어, 메뉴 위치가 이 안내와 다를 수 있습니다.
+
+<small>2026년 10월 19일 기준 Anthropic 공식 도움말로 작성했습니다. 화면 구성은 요금제와 업데이트에 따라 다를 수 있습니다.</small>

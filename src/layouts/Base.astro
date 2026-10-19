@@ -1,0 +1,29 @@
+---
+import '../styles/global.css';
+import { url } from '../lib/site';
+interface Props { title: string; description?: string }
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · KNUE AI GUIDE</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  </head>
+  <body class="min-h-screen">
+    <header class="border-b border-stone-200 bg-white">
+      <div class="mx-auto flex max-w-3xl items-center justify-between px-5 py-4">
+        <a href={url()} class="text-sm font-bold tracking-[0.2em]">KNUE AI GUIDE</a>
+        <nav class="flex gap-4 text-sm">
+          <a href={url('chatgpt/')} class="hover:text-chatgpt">ChatGPT</a>
+          <a href={url('claude/')} class="hover:text-claude">Claude</a>
+        </nav>
+      </div>
+    </header>
+    <main class="mx-auto max-w-3xl px-5 py-10"><slot /></main>
+    <footer class="mx-auto max-w-3xl px-5 pb-10 text-xs text-stone-500">한국교원대학교 교수자를 위한 AI 활용 안내</footer>
+  </body>
+</html>

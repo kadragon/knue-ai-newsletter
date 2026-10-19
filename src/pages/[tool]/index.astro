@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { TOOLS } from '../../content.config';
+import { TOOL_LABEL, TOOL_TEXT, url, slugOf, volLabel, type Tool } from '../../lib/site';
+
+export function getStaticPaths() {
+  return TOOLS.map((tool) => ({ params: { tool } }));
+}
+
+const tool = Astro.params.tool as Tool;
+const issues = (await getCollection('issues', (e) => e.data.tool === tool))
+  .sort((a, b) => b.data.year - a.data.year || b.data.vol - a.data.vol);
+---
+<Base title={`${TOOL_LABEL[tool]} 안내`}>
+  <p class={`text-sm font-semibold ${TOOL_TEXT[tool]}`}>{TOOL_LABEL[tool]} 트랙</p>
+  <h1 class="mt-1 text-3xl font-bold">전체 호 보기</h1>
+  <ul class="mt-8 space-y-4">
+    {issues.map((e) => (
+      <li>
+        <a href={url(`${tool}/${slugOf(e.id, tool)}/`)} class="block rounded-2xl border border-stone-200 bg-white p-6 hover:border-stone-400">
+          <p class="text-xs tracking-widest text-stone-500">{volLabel(e.data.vol, e.data.year)}</p>
+          <p class="mt-1 text-lg font-bold">{e.data.title}</p>
+          <p class="mt-2 text-sm text-stone-600">{e.data.description}</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>

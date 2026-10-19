@@ -1,0 +1,32 @@
+# Logs & temp
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# Editor / OS
+.vscode/
+.fleet/
+.idea/
+
+# Maps & archives
+*.map
+*.zip
+*.tar.gz
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+.cache/
+coverage/
+*.lock
+pnpm-lock.yaml
+package-lock.json
+
+# Rendered video
+*.mp4
+*.webm
+*.mov
+.playwright-mcp/
