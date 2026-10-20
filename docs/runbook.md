@@ -24,8 +24,16 @@ when it lands. Do not guess commands from the planned stack.
 
 | Target | Trigger | Method |
 |--------|---------|--------|
-| Web (production) | merge to `main` | GitHub Actions → GitHub Pages (Settings → Pages → Source: GitHub Actions) |
+| Web (production) | push or merge to `main`, or manual dispatch | `.github/workflows/deploy.yml` → GitHub Pages (Settings → Pages → Source: GitHub Actions) |
 | Email | after the web deploy is live | Maintainer pastes the generated summary into school mail and sends manually |
+
+Production URL: https://kadragon.github.io/knue-ai-newsletter/
+
+The workflow installs pnpm 12.14.0 and Node.js 26.12.0, installs the frozen lockfile, builds
+`dist/`, and uploads it as the Pages artifact. Deployment uses the `github-pages` environment.
+Pull requests targeting `main` run the build job without deploying.
+Check both jobs in the Actions tab and open the production URL after a successful deployment.
+To redeploy the current `main` manually, run `gh workflow run deploy.yml --ref main`.
 
 ## Environment variables
 

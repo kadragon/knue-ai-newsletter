@@ -21,6 +21,9 @@ email newsletter that links into it. Greenfield — no code yet; the agreed desi
   is written twice, with each tool's own UI, menu names, plan limits, and screenshots — never mix
   tools in one issue or reuse one tool's screenshots for the other. UI mockups live in
   `src/components/mock/<tool>/`; shared primitives (`Frame`, `Hl`, `Step`) stay tool-agnostic.
+- **School license baseline.** Claude guidance targets the school's Claude Team license. Explain
+  features and limits for Team; label personal-plan comparisons explicitly. Verify plan-specific
+  claims against official documentation, including any owner or member settings they require.
 - **Mockups are illustrations, not screenshots.** Keep the `Frame` caption label, no official
   logos, placeholder data only. Private reference captures go in gitignored `ui-reference/`.
 - **One source per issue.** Each issue is authored once as MDX with frontmatter metadata; the web

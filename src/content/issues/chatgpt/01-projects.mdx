@@ -3,15 +3,16 @@ tool: chatgpt
 vol: 1
 year: 2026
 title: "ChatGPT 프로젝트로 강의별 AI 작업실 만들기"
-description: "강의계획서와 루브릭을 한 번만 올려 두면, 그 강의 대화는 모두 같은 기준으로 답합니다."
-emailIntro: "매번 강의계획서를 다시 붙여 넣고 같은 설명을 반복하고 계신가요? ChatGPT의 '프로젝트' 기능을 쓰면 강의마다 자료와 지침을 한 번만 넣어 두고 계속 이어서 쓸 수 있습니다. 3단계 설정법과 바로 복사해 쓰는 지침 예시를 준비했습니다."
-lastVerified: 2026-10-19
+description: "강의 자료와 지침을 한곳에 모아 두고, 중간고사 이후 수업과 과제 일정을 정리해 보세요."
+emailIntro: "중간고사가 끝난 지금, 남은 수업과 과제 일정을 정리해 볼까요? ChatGPT의 '프로젝트'에 강의 자료와 지침을 한 번 넣어 두면 계속 이어서 쓸 수 있습니다. 3단계 설정법과 중간고사 이후 수업 준비에 쓸 첫 질문을 준비했습니다."
+lastVerified: 2026-10-20
 sources:
   - https://help.openai.com/en/articles/10169521-projects-in-chatgpt
   - https://help.openai.com/en/articles/8555545-file-uploads-faq
   - https://help.openai.com/en/articles/20001052-file-storage-and-library-in-chatgpt
   - https://help.openai.com/en/articles/6825453-chatgpt-release-notes
   - https://openai.com/enterprise-privacy/
+  - https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt
 ---
 
 import Step from '../../../components/mock/Step.astro';
@@ -22,7 +23,7 @@ import MoveChat from '../../../components/mock/chatgpt/MoveChat.astro';
 import Walkthrough from '../../../components/mock/Walkthrough.astro';
 import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
 
-{/* TODO(verify): Mockups and step labels checked against the live Korean chatgpt.com (workspace account, dark theme) on 2026-10-19. Still unverified: (1) that 지침 saves automatically on closing 프로젝트 설정 (no 저장 button exists; not tested by editing); (2) contents of the 프로젝트로 이동 submenu and drag-and-drop of a chat onto a sidebar project (help-center claim, not tested); (3) whether 메모리 can be changed after creation; (4) Free/Plus personal-plan UI may differ (e.g. no 스페이스 접근 권한, Google Drive/Slack tiles); (5) Settings → Data Controls → "Improve the model for everyone" and sharing labels "Only those invited"/"Anyone with a link" are English help-center names, Korean labels not checked. */}
+{/* TODO(verify): Mockups checked against the live Korean workspace UI on 2026-10-19. Read-only recheck on 2026-10-20 confirmed the 지침 field, memory menu, and close control in 프로젝트 설정, with no save button visible; the projects list also offered 만들기. No account content was edited, so save-and-reopen persistence remains untested. Project-memory changes are documented in the official help center, but were not applied in the account. Other unverified details: the 프로젝트로 이동 submenu and drag-and-drop; personal-plan UI differences; Korean labels for model-training and sharing controls. */}
 
 ## 한 줄 요약
 
@@ -42,7 +43,9 @@ import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
 
 ### 1단계. 프로젝트 만들기
 
-왼쪽 사이드바의 '프로젝트' 제목 옆 <Step n={1} /> <strong>＋</strong>를 누르고 <Step n={2} /> 이름을 입력한 뒤 <Step n={3} /> **프로젝트 만들기**를 누릅니다. 이름은 `2026-2 교육평가`처럼 학기와 과목을 함께 적으면 찾기 쉽습니다. 창 왼쪽 아래 **기본 메모리** 메뉴는 [아래](#알아-두면-좋은-점)에서 설명합니다.
+왼쪽 사이드바의 '프로젝트' 제목 옆 <Step n={1} /> <strong>＋</strong>를 누르고 <Step n={2} /> 이름을 입력한 뒤 <Step n={3} /> **프로젝트 만들기**를 누릅니다. 화면에 따라 왼쪽 **프로젝트** 메뉴를 연 뒤 **만들기**로 시작할 수도 있습니다. 이름은 `2026-2 교육평가`처럼 학기와 과목을 함께 적으면 찾기 쉽습니다.
+
+강의 자료를 다른 대화와 분리하려면 창 왼쪽 아래 **기본 메모리** 메뉴에서 **프로젝트 전용 메모리**를 고르세요. 메뉴가 보이지 않으면 [아래 메모리 설명](#알아-두면-좋은-점)을 확인합니다.
 
 <Walkthrough title="1단계 따라 하기">
   <NewProject />
@@ -50,7 +53,7 @@ import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
 
 ### 2단계. 지침 넣기
 
-프로젝트 화면 오른쪽 위 <Step n={1} /> **⋯** 메뉴에서 <Step n={2} /> **프로젝트 설정**을 엽니다. <Step n={3} /> **지침** 칸에 아래 [추천 활용법](#교수님께-추천하는-활용법)의 예시를 붙여 넣어 고친 뒤 <Step n={4} /> 오른쪽 위 <strong>✕</strong>로 창을 닫습니다. 따로 저장 버튼은 없습니다.
+프로젝트 화면 오른쪽 위 <Step n={1} /> **⋯** 메뉴에서 <Step n={2} /> **프로젝트 설정**을 엽니다. <Step n={3} /> **지침** 칸에 아래 [추천 활용법](#교수님께-추천하는-활용법)의 예시를 붙여 넣어 고친 뒤 <Step n={4} /> 오른쪽 위 <strong>✕</strong>로 창을 닫습니다. 화면에 저장 버튼이 있으면 먼저 눌러 주세요. **프로젝트 설정을 다시 열어 지침이 남아 있는지 확인합니다.**
 
 <Walkthrough title="2단계 따라 하기">
   <Settings />
@@ -58,11 +61,29 @@ import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
 
 ### 3단계. 자료 올리기
 
+**첫 실습에는 공개 가능한 강의계획서나 학생 정보가 없는 빈 루브릭을 쓰세요.** 학생 과제·성적표·개별 관찰 기록은 사용하지 않습니다. 이름만 가명으로 바꾸는 것으로 업로드해도 된다고 판단하지 마세요.
+
 프로젝트 화면에서 <Step n={1} /> **소스** 탭을 열고 <Step n={2} /> **소스 추가** → <Step n={3} /> **업로드**를 눌러 강의계획서, 루브릭 같은 파일을 올립니다. 파일을 창에 끌어다 놓아도 됩니다. 올린 파일은 이 프로젝트의 모든 채팅에서 함께 씁니다.
+
+도면·수식·표가 핵심인 자료는 내용을 제대로 읽었는지 원문과 대조하세요. 스캔한 PDF보다 텍스트를 선택할 수 있는 파일로 시작하면 좋습니다.
 
 <Walkthrough title="3단계 따라 하기">
   <Files />
 </Walkthrough>
+
+### 바로 써 보기. 중간고사 이후 수업 준비
+
+**이 프로젝트 안에서 새 채팅을 시작하고** 메시지 입력칸에 아래 질문을 붙여 넣어 보내세요. 지침은 답변 기준을 정하는 곳이고, 아래 질문은 실제 작업을 요청하는 말입니다.
+
+교육용 예시 — 업로드한 강의계획서로 먼저 확인해 보세요.
+
+```text
+중간고사가 끝난 시점이다. 올린 강의계획서에서 중간고사 이후의 수업 주제와
+남은 과제·평가 일정을 찾아 표로 정리해 줘. 항목마다 근거 파일명과 쪽수를 밝혀 줘.
+자료에 없는 날짜나 내용은 추측하지 말고 "자료에 없음"이라고 표시해 줘.
+```
+
+**확인할 것:** 과제·평가 일정 한 항목을 골라 원문과 대조하세요. 일정이 자료에 없으면 “자료에 없음”이라고 답하는지도 확인합니다. 이어서 “다음 수업에서 쓸 복습 질문 3개를 제안해 줘”라고 요청해 보세요.
 
 ### 덤. 기존 채팅 옮기기
 
@@ -109,16 +130,17 @@ import InstructionBuilder from '../../../components/InstructionBuilder.tsx';
 
 ## 꼭 지켜 주세요: 학생 개인정보
 
-- **이름, 학번, 연락처, 성적이 들어간 파일은 올리지 마세요.** 꼭 필요하면 `학생A`처럼 가명으로 바꾼 뒤 올립니다.
+- **이름, 학번, 연락처, 성적이 들어간 파일은 올리지 마세요.** 파일명·본문·주석에도 학생을 알아볼 정보가 남을 수 있습니다. 이름만 바꾸고 올리지 말고, 사용 가능 여부가 불분명하면 학내 개인정보 담당 부서에 먼저 확인하세요.
+- **학교에서 제공하는 조직 작업 공간(Business·Edu·Enterprise)은 기본적으로 학습 사용이 꺼져 있습니다.** 이 작업 공간의 대화와 파일은 기본적으로 모델 학습에 쓰이지 않습니다. 학교 이메일로 가입했더라도 개인 작업 공간을 쓰는 경우에는 아래 설정을 확인하세요.
 - **개인 계정이라면 학습 사용을 끄세요.** Settings → Data Controls → **Improve the model for everyone** 을 끄면 대화와 파일이 모델 개선에 쓰이지 않습니다.
 - **공유할 때는 "Only those invited"를 고르세요.** "Anyone with a link"로 열면 링크를 받은 사람은 누구나 들어올 수 있습니다.
 
 ## 알아 두면 좋은 점
 
-- **파일 수 한도**: 프로젝트 하나에 무료는 5개, Plus는 25개, Edu·Pro는 40개까지 올릴 수 있습니다.
+- **파일 수 한도: Business는 프로젝트 하나에 40개까지** 올릴 수 있습니다. 무료는 5개, Go·Plus는 25개, Edu·Pro·Enterprise는 40개까지입니다.
 - **전체를 다 읽는다는 보장은 없습니다.** ChatGPT는 질문에 맞는 부분을 찾아 읽습니다. 중요한 답변은 원문과 대조해 확인하세요.
 - **문서 속 그림과 표 이미지는 읽지 못할 수 있습니다.** 스캔한 PDF보다 텍스트가 살아 있는 파일이 좋습니다.
 - **인용과 참고문헌은 지어낼 수 있습니다.** 논문에 쓰기 전에 반드시 원문을 확인하세요.
-- **기억 범위**: 프로젝트를 만들 때 **기본 메모리** 메뉴에서 **프로젝트 전용 메모리**를 고르면 이 프로젝트 안의 대화만 참고합니다. 강의 자료와 개인 대화가 섞이지 않게 하고 싶을 때 쓰세요. 나중에 바꾸지 못할 수 있으니 만들 때 정해 두세요.
+- **기억 범위**: 프로젝트를 만들 때 **기본 메모리** 메뉴에서 **프로젝트 전용 메모리**를 고르면 이 프로젝트 안의 대화만 참고합니다. 강의 자료와 개인 대화가 섞이지 않게 하고 싶을 때 쓰세요. 나중에 프로젝트 설정에서도 바꿀 수 있습니다. 조직과 계정에서 메모리 사용이 허용되어 있어야 합니다.
 
-<small>2026년 10월 19일 기준 OpenAI 공식 도움말로 작성했습니다. 화면 구성은 요금제와 업데이트에 따라 다를 수 있습니다.</small>
+<small>2026년 10월 20일 기준 OpenAI 공식 도움말로 작성했습니다. 화면 구성은 요금제와 업데이트에 따라 다를 수 있습니다.</small>
