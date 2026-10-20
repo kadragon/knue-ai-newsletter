@@ -1,6 +1,7 @@
 # Architecture
 
-Status: **planned** — agreed design, nothing scaffolded yet. Update this file as parts land.
+Status: **partially implemented** — the Astro site, both issue tracks, React interactions, and
+GitHub Pages workflow are implemented. Email generation and video rendering remain planned.
 
 ## Publishing flow
 

@@ -20,7 +20,7 @@ function build(purpose: Purpose, subject: string, tone: Tone, strengths: number,
     lines.push('루브릭에 없는 기준은 임의로 만들지 않는다.');
   } else if (purpose === 'research') {
     lines.push(`이 프로젝트는 「${name}」 연구용이다. 업로드한 논문과 연구 노트만 근거로 요약하고 비교한다.`);
-    lines.push('논문끼리 결과가 상충하면 따로 표시하고, 추측과 근거를 구분해서 쓴다.');
+    lines.push('논문끼리 결과가 상충하면 따로 표시하고 추측과 근거를 구분해서 쓴다.');
   } else {
     lines.push(`이 프로젝트는 「${name}」 업무용이다. 업로드한 학칙과 규정을 근거로 검토 의견을 개조식(□, ○, -)으로 쓴다.`);
     lines.push('해석이 갈리는 부분은 단정하지 말고 "담당 부서 확인 필요"라고 표시한다.');
@@ -40,12 +40,21 @@ export default function InstructionBuilder() {
   const [cite, setCite] = useState(true);
   const [noGuess, setNoGuess] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
 
   const text = useMemo(() => build(purpose, subject, tone, strengths, fixes, cite, noGuess),
     [purpose, subject, tone, strengths, fixes, cite, noGuess]);
 
   const copy = async () => {
-    try { await navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* clipboard blocked */ }
+    setCopied(false);
+    setCopyError(false);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setCopyError(true);
+    }
   };
 
   const chip = (on: boolean) =>
@@ -54,11 +63,12 @@ export default function InstructionBuilder() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-stone-300 bg-white p-5 shadow-sm">
       <p className="text-base font-bold">🛠 내 지침 만들기</p>
+      <p className="mt-1 text-xs text-stone-500">교육용 예시</p>
       <p className="mt-1 text-sm text-stone-500">고르는 대로 아래 지침이 바로 바뀝니다. 완성되면 복사해서 프로젝트 지침 칸에 붙여 넣으세요.</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
         {(Object.keys(PURPOSES) as Purpose[]).map((p) => (
-          <button key={p} type="button" className={chip(purpose === p)} onClick={() => setPurpose(p)}>{PURPOSES[p].label}</button>
+          <button key={p} type="button" aria-pressed={purpose === p} className={chip(purpose === p)} onClick={() => setPurpose(p)}>{PURPOSES[p].label}</button>
         ))}
       </div>
 
@@ -81,7 +91,7 @@ export default function InstructionBuilder() {
 
       <div className="mt-4 flex flex-wrap gap-2">
         {(Object.keys(TONES) as Tone[]).map((t) => (
-          <button key={t} type="button" className={chip(tone === t)} onClick={() => setTone(t)}>{TONES[t]}</button>
+          <button key={t} type="button" aria-pressed={tone === t} className={chip(tone === t)} onClick={() => setTone(t)}>{TONES[t]}</button>
         ))}
       </div>
 
@@ -97,6 +107,9 @@ export default function InstructionBuilder() {
           {copied ? '복사됨 ✓' : '복사'}
         </button>
       </div>
+      <p role="status" className="mt-2 text-sm text-stone-600">
+        {copyError ? '복사하지 못했습니다. 위 지침을 직접 선택해 복사해 주세요.' : ''}
+      </p>
     </div>
   );
 }

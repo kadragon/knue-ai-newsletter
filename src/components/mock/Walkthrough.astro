@@ -17,7 +17,7 @@ const { title = '따라 하기' } = Astro.props;
       <button type="button" class="ml-1 rounded-md bg-amber-500 px-3 py-1 font-medium text-white hover:bg-amber-600" data-wt-play>일시정지</button>
     </span>
   </div>
-  <div class="relative" data-wt-stage>
+  <div class="relative overflow-hidden" data-wt-stage>
     <slot />
     <div class="wt-cursor pointer-events-none absolute left-0 top-0 z-20 opacity-0" data-wt-cursor aria-hidden="true">
       <svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l16 9-7 2-3 7z" fill="#1b2430" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
@@ -73,6 +73,16 @@ const { title = '따라 하기' } = Astro.props;
     }
 
     async moveTo(el: HTMLElement) {
+      // Reveal the active control for both playback and manual step navigation.
+      const box = el.closest<HTMLElement>('.overflow-x-auto');
+      if (box) {
+        const br = box.getBoundingClientRect(), er = el.getBoundingClientRect();
+        if (er.width > box.clientWidth - 24 || er.left < br.left + 12) {
+          box.scrollLeft += er.left - br.left - 12;
+        } else if (er.right > br.right - 12) {
+          box.scrollLeft += er.right - br.right + 12;
+        }
+      }
       const s = this.stage.getBoundingClientRect(), r = el.getBoundingClientRect();
       const x = r.left - s.left + Math.min(r.width * 0.5, 60), y = r.top - s.top + r.height * 0.6;
       this.cursor.style.opacity = '1';
@@ -115,12 +125,6 @@ const { title = '따라 하기' } = Astro.props;
         this.i++;
         const el = this.steps[this.i];
         this.render();
-        // Only scroll the frame horizontally (narrow screens); never move the page under the reader.
-        const box = el.closest<HTMLElement>('.overflow-x-auto');
-        if (box) {
-          const br = box.getBoundingClientRect(), er = el.getBoundingClientRect();
-          if (er.left < br.left || er.right > br.right) box.scrollLeft += er.left - br.left - 24;
-        }
         this.say.textContent = this.caption(el);
         await this.moveTo(el);
         if (token !== this.run) return;
