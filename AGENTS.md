@@ -10,6 +10,7 @@ email newsletter that links into it. Greenfield — no code yet; the agreed desi
 |------|--------------|
 | `docs/architecture.md` | Before scaffolding or adding a content type, output channel, or video tool |
 | `docs/runbook.md` | For build, preview, render, deploy, and email-send commands |
+| `docs/email-style.md` | Before drafting an issue email; approved subject, structure, and Korean wording |
 
 ## Working with Existing Code
 

@@ -1,0 +1,44 @@
+---
+// verified-against: live chatgpt.com (Korean UI, workspace account, Work mode) via Chrome, 2026-10-25
+// Icon rail + the 예약 flyout that opens when hovering the clock icon. Task titles are placeholders;
+// the "평일 오전 6:00에" schedule wording is unverified (only "매주 월요일 오전 8:00에" was seen).
+import Hl from '../Hl.astro';
+import Icon from './Icon.astro';
+interface Props { railN?: number; newN?: number }
+const { railN, newN } = Astro.props;
+const tasks = [
+  ['Work 주기 시작 (06시)', '월요일 오전 6시 · 평일 오전 6:00에'],
+  ['Work 주기 시작 (11시)', '월요일 오전 11시 · 평일 오전 11:00에'],
+  ['Work 주기 시작 (16시)', '월요일 오후 4시 · 평일 오후 4:00에'],
+];
+const rail = 'flex h-7 w-7 items-center justify-center rounded-lg text-[#5d5d5d]';
+---
+<div class="flex shrink-0">
+  <nav class="flex w-11 flex-col items-center gap-2 bg-[#f9f9f9] py-2">
+    <span class={rail}><Icon name="home" /></span>
+    <span class={rail}><Icon name="edit" /></span>
+    {railN
+      ? <Hl n={railN} label="예약 (시계 아이콘)" class="inline-block !rounded-lg"><span class={`${rail} bg-[#ececec] text-[#0d0d0d]`}><Icon name="clock" /></span></Hl>
+      : <span class={`${rail} bg-[#ececec] text-[#0d0d0d]`}><Icon name="clock" /></span>}
+    <span class={rail}><Icon name="dots" /></span>
+    <span class="my-0.5 h-px w-5 bg-[#e5e5e5]"></span>
+    <span class={rail}><Icon name="folder" /></span>
+  </nav>
+  <aside class="w-52 border-r border-[#ececec] bg-[#f9f9f9] p-2 text-[#0d0d0d]">
+    <div class="flex items-center justify-between px-2 py-1">
+      <span class="text-[15px] font-medium">예약</span>
+      <span class="flex gap-2 text-[#5d5d5d]"><Icon name="filter" class="h-3.5 w-3.5" /><Icon name="search" class="h-3.5 w-3.5" /><Icon name="panel" class="h-3.5 w-3.5" /></span>
+    </div>
+    {newN
+      ? <Hl n={newN} class="mt-1"><p class="flex items-center gap-2 rounded-lg bg-[#ececec] px-2 py-1.5"><Icon name="plus" class="h-3.5 w-3.5" />새 작업</p></Hl>
+      : <p class="mt-1 flex items-center gap-2 px-2 py-1.5"><Icon name="plus" class="h-3.5 w-3.5" />새 작업</p>}
+    <p class="mt-3 px-2 text-[12px] text-[#8f8f8f]">활성</p>
+    {tasks.map(([t, s]) => (
+      <div class="rounded-lg px-2 py-1.5">
+        <p>{t}</p>
+        <p class="text-[11px] text-[#8f8f8f]">{s}</p>
+      </div>
+    ))}
+    <p class="mt-2 px-2 text-[12px] text-[#8f8f8f]">일시 정지됨 ›</p>
+  </aside>
+</div>

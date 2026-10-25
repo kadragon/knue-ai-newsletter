@@ -1,0 +1,92 @@
+---
+// verified-against: live claude.ai/code/routines and /code/routines/new (Korean UI, Team org account), 2026-10-25
+// The form was opened read-only; nothing was filled in or created. The trigger summary line
+// ("…에 실행됩니다") shown above the schedule tabs is replaced by "스케줄" because its wording
+// for this cron expression was not observed. Connector chips and the list card are placeholders.
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+const icon = 'h-4 w-4 shrink-0 fill-none stroke-current stroke-[1.5]';
+const clock = '<circle cx="8" cy="8" r="5.5" /><path d="M8 5v3l2 1.5" />';
+const tabs = ['한 번', '시간별', '매일', '평일', '매주', '사용자 지정'];
+const field = 'min-h-[30px] rounded-lg border border-black/[0.08] bg-white px-2.5 py-1.5';
+---
+<Frame tone="claude" caption="① 루틴 화면에서 새 루틴">
+  <div class="flex h-56 bg-white text-black/90">
+    <aside class="w-40 shrink-0 space-y-0.5 border-r border-black/[0.08] bg-[#f9f9f8] p-2 text-[13px] text-black/80">
+      <p class="mb-1 px-2 py-1 font-serif text-base font-medium">Code</p>
+      <p class="flex items-center gap-2 rounded-lg px-2 py-1"><span class="w-4 text-center">+</span>새로 만들기</p>
+      <p class="flex items-center gap-2 rounded-lg px-2 py-1"><svg viewBox="0 0 16 16" class={icon}><circle cx="7" cy="7" r="4.5" /><path d="m10.5 10.5 3 3" /></svg>검색</p>
+      <p class="flex items-center gap-2 rounded-lg px-2 py-1"><svg viewBox="0 0 16 16" class={icon}><rect x="5" y="2.5" width="8.5" height="8.5" rx="1.5" /><path d="M3 5.5v7a1 1 0 0 0 1 1h7" /></svg>아티팩트</p>
+      <p class="flex items-center gap-2 rounded-lg bg-black/[0.07] px-2 py-1 font-medium"><svg viewBox="0 0 16 16" class={icon} set:html={clock} />루틴</p>
+      <p class="flex items-center gap-2 rounded-lg px-2 py-1"><svg viewBox="0 0 16 16" class={icon}><path d="M4 11V7.5a4 4 0 0 1 8 0V11l1 1.5H3zM6.5 14h3" /></svg>온콜</p>
+      <p class="flex items-center gap-2 rounded-lg px-2 py-1"><svg viewBox="0 0 16 16" class={icon}><rect x="2.5" y="5" width="11" height="8" rx="1.5" /><path d="M6 5V3.5h4V5" /></svg>사용자 지정</p>
+    </aside>
+    <div class="flex-1 px-6 py-5">
+      <p class="font-serif text-2xl font-medium">루틴</p>
+      <div class="mt-3 flex items-center justify-between">
+        <div class="flex gap-1 text-[13px]">
+          <span class="rounded-md bg-black/[0.07] px-2 py-0.5">내 항목</span>
+          <span class="px-2 py-0.5 text-black/60">템플릿</span>
+        </div>
+        <Hl n={1} class="inline-block"><span class="block rounded-lg bg-[#141413] px-2.5 py-1 text-[13px] text-white">새 루틴</span></Hl>
+      </div>
+      <div class="mt-4 w-60 rounded-xl border border-black/[0.08] p-3">
+        <p class="font-medium">아침 일정 요약</p>
+        <p class="mt-1 truncate text-xs text-black/60">오늘 일정을 세 줄로 정리해 줘.</p>
+        <p class="mt-2 text-xs text-black/50">활성 · 매일 오전 8:00</p>
+      </div>
+    </div>
+  </div>
+</Frame>
+<Frame tone="claude" caption="② 이름 ③ 지침 → ④ 스케줄의 사용자 지정 ⑤ Cron 표현식 → ⑥ 커넥터 빼기 → ⑦ 만들기">
+  <div class="bg-white px-8 py-4 text-black/90">
+    <p class="text-xs text-black/50">루틴 / <span class="text-black/90">새 루틴</span></p>
+    <div class="mx-auto mt-3 max-w-md space-y-3">
+      <div>
+        <p class="text-xs text-black/60">이름 <span class="text-[#c6613f]">*</span></p>
+        <Hl n={2} type class="mt-1"><p class={field}>사용량 사이클</p></Hl>
+      </div>
+      <div>
+        <p class="text-xs text-black/60">지침</p>
+        <div class="mt-1 rounded-lg bg-black/[0.05]">
+          <Hl n={3} type class="m-1"><p class="h-10 px-1.5 py-1">오늘 날짜와 요일을 한 줄로 알려 줘.</p></Hl>
+          <p class="flex justify-between rounded-b-lg bg-black/[0.04] px-2.5 py-1 text-[11px] text-black/55"><span>저장소 선택</span><span>기본</span></p>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs text-black/60">트리거 선택</p>
+        <div class="mt-1 rounded-lg bg-black/[0.05] px-2.5 py-2">
+          <p class="flex items-center justify-between"><span class="flex items-center gap-1.5"><svg viewBox="0 0 16 16" class={icon} set:html={clock} />스케줄</span><span class="text-black/50">✕</span></p>
+          <div class="mt-1.5 flex gap-0.5 text-xs">
+            {tabs.map((t) => t === '사용자 지정'
+              ? <Hl n={4} class="inline-block"><span class="block rounded-[5px] bg-black/10 px-1.5 py-0.5">{t}</span></Hl>
+              : <span class="rounded-[5px] px-1.5 py-0.5">{t}</span>)}
+          </div>
+          <p class="mt-2 text-xs text-black/60">Cron 표현식</p>
+          <Hl n={5} type class="mt-1"><p class={`${field} font-mono text-xs`}>CRON_TZ=Asia/Seoul 0 6,11,16 * * 1-5</p></Hl>
+        </div>
+      </div>
+      <div>
+        <div class="flex w-fit gap-0.5 rounded-lg bg-black/[0.05] p-0.5 text-xs">
+          <span class="rounded-md bg-white px-2 py-0.5">커넥터 <span class="text-black/50">2</span></span>
+          <span class="px-2 py-0.5">동작</span><span class="px-2 py-0.5">알림</span>
+        </div>
+        <p class="mt-2 text-xs">커넥터</p>
+        <p class="text-[11px] text-black/55">각 실행 중 Claude가 사용할 수 있는 커넥터입니다.</p>
+        <div class="mt-1.5 flex items-center gap-1.5 text-xs">
+          <Hl n={6} class="inline-block" label="커넥터 ✕">
+            <span class="flex gap-1.5">
+              <span class="rounded-md border border-black/[0.08] px-1.5 py-0.5">Google Drive <span class="text-black/50">✕</span></span>
+              <span class="rounded-md border border-black/[0.08] px-1.5 py-0.5">Gmail <span class="text-black/50">✕</span></span>
+            </span>
+          </Hl>
+          <span class="rounded-md border border-dashed border-black/15 px-1.5 py-0.5 text-black/55">커넥터 추가</span>
+        </div>
+      </div>
+      <div class="flex justify-end gap-1.5 pt-1">
+        <span class="rounded-lg bg-black/[0.06] px-2.5 py-1">취소</span>
+        <Hl n={7} class="inline-block"><span class="block rounded-lg bg-[#141413] px-2.5 py-1 text-white">만들기</span></Hl>
+      </div>
+    </div>
+  </div>
+</Frame>
