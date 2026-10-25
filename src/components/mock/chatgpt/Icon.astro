@@ -1,7 +1,7 @@
 ---
-// verified-against: live chatgpt.com (Korean UI, workspace account) via Chrome, 2026-10-19
+// verified-against: live chatgpt.com (Korean UI, workspace account) via Chrome, 2026-10-19; clock/gauge/home added 2026-10-25
 /** Simple line icons approximating ChatGPT's sidebar/menu glyphs. Not official assets. */
-interface Props { name: 'folder' | 'edit' | 'search' | 'panel' | 'plus' | 'dots' | 'close' | 'chevron' | 'gear' | 'pin' | 'share' | 'upload' | 'bulb'; class?: string }
+interface Props { name: 'folder' | 'edit' | 'search' | 'panel' | 'plus' | 'dots' | 'close' | 'chevron' | 'gear' | 'pin' | 'share' | 'upload' | 'bulb' | 'clock' | 'arrow-up' | 'mic' | 'filter' | 'gauge' | 'home' | 'dot'; class?: string }
 const { name, class: cls = 'h-4 w-4' } = Astro.props;
 const paths: Record<Props['name'], string> = {
   folder: '<path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4l2 2h9A1.5 1.5 0 0 1 21 9.5v8A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z"/><path d="M3 10.5h18"/>',
@@ -17,6 +17,13 @@ const paths: Record<Props['name'], string> = {
   share: '<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',
   upload: '<path d="M12 16V5M8 9l4-4 4 4"/><path d="M5 19h14"/>',
   bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12"/>',
+  'arrow-up': '<path d="M12 19V5M6 11l6-6 6 6"/>',
+  mic: '<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>',
+  filter: '<path d="M4 7h16M7 12h10M10 17h4"/>',
+  gauge: '<path d="M4.5 16a8 8 0 1 1 15 0"/><path d="m12 13 3.5-4"/>',
+  home: '<path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/>',
+  dot: '<circle cx="12" cy="12" r="7.5"/>',
 };
 ---
 <svg class={`inline-block shrink-0 ${cls}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={paths[name]} />

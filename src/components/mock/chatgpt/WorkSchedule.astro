@@ -1,0 +1,50 @@
+---
+// verified-against: live chatgpt.com (Korean UI, workspace account) via Chrome, 2026-10-25
+// Chat/Work toggle, Work composer, and the 예약 flyout were seen live. The chat-side schedule
+// confirmation (step 3) was not seen because no message was sent, so it is not drawn.
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+import Icon from './Icon.astro';
+import ScheduledPanel from './ScheduledPanel.astro';
+---
+<Frame caption="① 위쪽 Work로 전환 → ② 요청문 붙여 넣고 보내기">
+  <div class="flex h-72 flex-col items-center bg-[#fcfcfc] px-6 py-4 text-[#0d0d0d]">
+    <div class="flex rounded-full bg-[#f0f0f0] p-0.5 text-[13px]">
+      <span class="rounded-full px-5 py-1 text-[#5d5d5d]">Chat</span>
+      <Hl n={1} class="inline-block !rounded-full"><span class="block rounded-full bg-white px-5 py-1 font-medium shadow-sm">Work</span></Hl>
+    </div>
+    <p class="mt-10 text-[19px]">어떤 작업을 할까요?</p>
+    <div class="mt-4 w-full max-w-[440px]">
+      <div class="rounded-[28px] bg-white px-4 py-3 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.05)]">
+        <Hl n={2} type>
+          <p class="min-h-10 px-0.5 text-[12px] leading-relaxed">평일 오전 6시, 오전 11시, 오후 4시(한국 시간)마다 실행되는 예약 작업을 만들어 줘. …</p>
+        </Hl>
+        <div class="mt-2 flex items-center justify-between text-[#5d5d5d]">
+          <Icon name="plus" />
+          <span class="flex items-center gap-3">
+            <span class="flex items-center gap-1 text-[12px]">Medium <Icon name="chevron" class="h-3 w-3" /></span>
+            <Icon name="mic" />
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#0d0d0d] text-white"><Icon name="arrow-up" class="h-4 w-4" /></span>
+          </span>
+        </div>
+      </div>
+      <div class="mx-3 flex gap-4 rounded-b-2xl bg-[#f3f3f3] px-3 py-1.5 text-[11px] text-[#5d5d5d]">
+        <span class="flex items-center gap-1"><Icon name="folder" class="h-3.5 w-3.5" />프로젝트 선택</span>
+        <span>파일</span>
+        <span>플러그인</span>
+      </div>
+    </div>
+  </div>
+</Frame>
+
+<Frame caption="④ 왼쪽 예약(시계) 아이콘 → 활성 목록에서 등록된 작업 확인">
+  <div class="flex h-72 bg-[#fcfcfc]">
+    <ScheduledPanel railN={4} />
+    <div class="flex flex-1 justify-center pt-4">
+      <div class="flex h-fit rounded-full bg-[#f0f0f0] p-0.5 text-[13px]">
+        <span class="rounded-full px-5 py-1 text-[#5d5d5d]">Chat</span>
+        <span class="rounded-full bg-white px-5 py-1 font-medium shadow-sm">Work</span>
+      </div>
+    </div>
+  </div>
+</Frame>

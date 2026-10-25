@@ -26,13 +26,19 @@ const { tool, vol, year, title, description, sources } = issue.data;
     <section aria-labelledby="official-sources" class="mt-10 border-t border-stone-200 pt-6">
       <h2 id="official-sources">참고한 공식 자료</h2>
       <ul class="text-sm [overflow-wrap:anywhere]">
-        {sources.map((source) => <li><a href={source}>{source}</a></li>)}
+        {sources.map((source) => <li><a href={source} target="_blank" rel="noopener noreferrer">{source}</a></li>)}
       </ul>
     </section>
   </article>
 </Base>
 
 <script>
+  // Open external links in a new tab so faculty keep the guide open while following a step.
+  document.querySelectorAll<HTMLAnchorElement>('article a[href^="http"]').forEach((a) => {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+  });
+
   // Copy button on every instruction example so faculty can paste it straight into a project.
   document.querySelectorAll<HTMLPreElement>('article pre').forEach((pre) => {
     if (pre.closest('.not-prose')) return;

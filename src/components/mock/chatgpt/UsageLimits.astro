@@ -1,0 +1,53 @@
+---
+// verified-against: live chatgpt.com/settings/usage?tab=overview (Korean UI, workspace account) via Chrome, 2026-10-25
+// The checked account was Pro (no five-hour limit), so only 주간 사용 한도 was seen. The 5시간 사용 한도 row is
+// drawn by analogy for the school Business seat; its label and layout are unverified (no screenshot found).
+import Frame from '../Frame.astro';
+import Hl from '../Hl.astro';
+import Icon from './Icon.astro';
+const items = ['일반', '모양', '알림', '계정'];
+const row = 'flex items-center gap-2 rounded-lg px-2 py-1.5';
+---
+<Frame caption="① 설정의 사용량 → ② 5시간 한도 남은 비율 → ③ 초기화까지 남은 시간 → ④ 주간 한도">
+  <div class="flex h-[22rem] bg-[#fcfcfc] text-[#0d0d0d]">
+    <aside class="w-40 shrink-0 border-r border-[#ececec] p-2">
+      <p class="px-2 py-1 text-[15px] font-medium">설정</p>
+      <p class="mt-1 flex items-center gap-2 rounded-lg bg-[#ececec] px-2 py-1.5 text-[#8f8f8f]"><Icon name="search" class="h-3.5 w-3.5" />검색</p>
+      <p class="mt-2 px-2 py-1 text-[12px] text-[#8f8f8f]">개인</p>
+      {items.map((t) => <p class={row}><Icon name="dot" class="h-3.5 w-3.5 text-[#5d5d5d]" />{t}</p>)}
+      <p class={`${row} text-[#8f8f8f]`}>⋯</p>
+      <Hl n={1} label="사용량 (설정 메뉴)"><p class={`${row} bg-[#ececec]`}><Icon name="gauge" class="h-3.5 w-3.5" />사용량</p></Hl>
+      <p class={row}><Icon name="dot" class="h-3.5 w-3.5 text-[#5d5d5d]" />데이터 관리</p>
+    </aside>
+    <div class="flex-1 px-6 py-4">
+      <p class="text-[22px] font-medium">사용량</p>
+      <div class="mt-2 flex gap-1 text-[13px]">
+        <span class="rounded-full bg-[#ececec] px-3 py-1">개요</span>
+        <span class="px-3 py-1 text-[#5d5d5d]">사용량 분석</span>
+      </div>
+      <p class="mt-4 text-[16px] font-medium">플랜 사용 한도</p>
+      <p class="mt-0.5 text-[12px] text-[#5d5d5d]">Codex, Work, 워크스페이스 에이전트, Excel용 ChatGPT에서 사용량 한도를 공유합니다. Chat 대화는 사용량에 포함되지 않습니다.</p>
+      <div class="mt-2.5 divide-y divide-[#ececec] rounded-2xl border border-[#ececec] bg-white px-4">
+        {/* TODO(verify): five-hour row label/layout drawn by analogy to the weekly row; not seen on a Business seat. */}
+        <div class="py-3">
+          <p class="text-[14px] font-medium">5시간 사용 한도</p>
+          <div class="mt-1 flex items-center justify-between text-[12px] text-[#5d5d5d]">
+            <Hl n={3} class="inline-block"><span class="block px-0.5">3시간 12분 후 초기화됩니다</span></Hl>
+            <Hl n={2} class="inline-block"><span class="block px-0.5">64% 남음</span></Hl>
+          </div>
+          <div class="mt-2 h-1.5 rounded-full bg-[#ececec]"><div class="h-1.5 w-[64%] rounded-full bg-[#0d0d0d]"></div></div>
+        </div>
+        <Hl n={4} label="주간 사용 한도" class="!rounded-none">
+          <div class="py-3">
+            <p class="text-[14px] font-medium">주간 사용 한도</p>
+            <div class="mt-1 flex items-center justify-between text-[12px] text-[#5d5d5d]">
+              <span>5일 20시간 후 초기화됩니다</span>
+              <span>81% 남음</span>
+            </div>
+            <div class="mt-2 h-1.5 rounded-full bg-[#ececec]"><div class="h-1.5 w-[81%] rounded-full bg-[#0d0d0d]"></div></div>
+          </div>
+        </Hl>
+      </div>
+    </div>
+  </div>
+</Frame>
