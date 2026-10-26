@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Pretendard v1.3.9 (OFL-1.1), bundled so renders don't depend on system fonts. */
+      @font-face { font-family: "Pretendard Variable"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"); font-weight: 45 920; }
+      /* D2Coding v1.3 subset (OFL-1.1) for monospace text in UI illustrations. */
+      @font-face { font-family: "D2Coding"; src: url("assets/fonts/D2Coding-subset.woff2") format("woff2"); font-weight: 400; }
+      /* KNUE UI manual colours (sampled from the official artwork); no school marks are used. */
+      :root {
+        --blue: #008cd2;
+        --navy: #003a8c;
+        --green: #5bb431;
+        --gray: #787878;
+        --ink: #1b2430;
+        --soft: #f2f7fb;
+        --chatgpt: #0f7b5f;
+        --font: "Pretendard Variable", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #fff; }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); color: var(--ink); }
+      .clip { position: absolute; inset: 0; }
+      .scene { display: flex; flex-direction: column; justify-content: center; padding: 0 200px; }
+
+      /* Persistent chrome */
+      #tag { position: absolute; top: 64px; left: 96px; display: flex; gap: 14px; align-items: center; font-size: 30px; font-weight: 600; color: var(--navy); z-index: 10; }
+      #tag .tool { background: var(--chatgpt); color: #fff; border-radius: 10px; padding: 4px 16px; font-size: 28px; }
+      #bar { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(90deg, var(--navy), var(--blue)); z-index: 10; }
+
+      .eyebrow { font-size: 40px; font-weight: 600; color: var(--blue); }
+      .h1 { font-size: 96px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; color: var(--navy); }
+      .h2 { font-size: 72px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.25; color: var(--navy); }
+      .body { font-size: 44px; font-weight: 500; line-height: 1.5; color: var(--ink); }
+      .muted { color: var(--gray); }
+      em { font-style: normal; color: var(--blue); }
+
+      /* Hook */
+      #s1 .stop { margin-top: 56px; display: inline-flex; align-items: center; gap: 24px; align-self: flex-start; background: var(--soft); border-left: 10px solid var(--blue); border-radius: 16px; padding: 28px 40px; font-size: 44px; font-weight: 600; }
+
+      /* Two limits */
+      .limits { display: flex; gap: 48px; margin-top: 56px; }
+      .limit { position: relative; width: 640px; border: 4px solid var(--blue); border-radius: 24px; padding: 40px 44px; background: #fff; }
+      .limit.weekly { border-color: var(--navy); background: var(--soft); }
+      .limit .name { font-size: 52px; font-weight: 800; color: var(--blue); letter-spacing: -0.02em; }
+      .limit.weekly .name { color: var(--navy); }
+      .limit .desc { margin-top: 16px; font-size: 38px; font-weight: 500; line-height: 1.45; }
+      .limit .desc b { color: var(--ink); }
+      .badge { position: absolute; top: -24px; right: 32px; background: var(--green); color: #fff; font-size: 28px; font-weight: 700; border-radius: 99px; padding: 6px 22px; }
+
+      /* Timeline */
+      .tl-title { font-size: 60px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
+      .tl-sub { margin-top: 12px; font-size: 38px; color: var(--gray); font-weight: 500; }
+      .track { position: relative; width: 1440px; height: 360px; margin-top: 64px; }
+      .work { position: absolute; top: 0; height: 100%; left: 288px; width: 864px; background: rgb(91 180 49 / 0.14); border: 3px dashed var(--green); border-radius: 18px; }
+      .work span { position: absolute; top: 16px; left: 24px; font-size: 30px; font-weight: 700; color: #3f8a1f; }
+      .cycle { position: absolute; top: 120px; height: 120px; border-radius: 16px; background: var(--blue); color: #fff; font-size: 34px; font-weight: 700; display: flex; align-items: center; justify-content: center; transform-origin: left center; border: 4px solid #fff; }
+      .cycle.alt { background: var(--navy); }
+      .reset { position: absolute; top: 96px; width: 8px; height: 168px; margin-left: -4px; background: var(--green); border-radius: 4px; }
+      .axis { position: absolute; left: 0; right: 0; top: 300px; border-top: 3px solid #d5dde5; }
+      .tick { position: absolute; top: 312px; transform: translateX(-50%); white-space: nowrap; font-size: 30px; color: var(--gray); font-variant-numeric: tabular-nums; }
+      .result { margin-top: 24px; font-size: 48px; font-weight: 700; }
+      .result b { color: var(--blue); }
+
+      /* UI illustrations (simplified, ChatGPT-like neutral palette) */
+      .frame { width: 1080px; border-radius: 24px; border: 2px solid #d6d3cd; overflow: hidden; box-shadow: 0 24px 60px rgb(0 0 0 / 0.08); background: #fff; }
+      .frame .dots { display: flex; gap: 10px; padding: 16px 20px; background: #f1efea; border-bottom: 2px solid #e4e1db; }
+      .frame .dots i { width: 16px; height: 16px; border-radius: 50%; background: #d0ccc4; }
+      .cap { margin-top: 20px; font-size: 28px; color: var(--gray); }
+      .split { display: flex; gap: 72px; align-items: center; margin-left: -40px; }
+      .split .text { width: 400px; flex-shrink: 0; }
+      .hl { border-radius: 14px; box-shadow: 0 0 0 4px #fff, 0 0 0 9px var(--blue); }
+      .row { display: flex; align-items: center; gap: 24px; padding: 16px 20px; font-size: 30px; }
+      .row .label { width: 280px; }
+      .row .label small { display: block; margin-top: 4px; font-size: 28px; color: rgb(0 0 0 / 0.55); }
+      .meter { flex: 1; height: 16px; border-radius: 99px; background: rgb(37 125 224 / 0.12); overflow: hidden; }
+      .meter div { height: 100%; border-radius: 99px; background: #257de0; transform-origin: left center; }
+      .pct { width: 150px; text-align: right; font-size: 28px; color: rgb(0 0 0 / 0.6); }
+      .field-label { font-size: 28px; color: rgb(0 0 0 / 0.6); margin-bottom: 8px; }
+      .field { border: 2px solid rgb(0 0 0 / 0.08); border-radius: 12px; padding: 14px 18px; font-size: 28px; min-height: 64px; }
+      .mono { font-family: "D2Coding", monospace; font-size: 30px; }
+      .cron-note { margin-top: 12px; font-size: 30px; font-weight: 600; color: var(--blue); }
+      .cron-note .mono { font-size: 30px; background: var(--soft); border-radius: 8px; padding: 2px 10px; }
+      .btn { display: inline-block; background: #141413; color: #fff; border-radius: 12px; padding: 12px 26px; font-size: 30px; }
+
+      /* Click-path illustrations (layout from live chatgpt.com, light theme, 2026-10-26; placeholder data) */
+      .ui { position: relative; width: 1080px; height: 600px; background: #fcfcfc; overflow: hidden; color: #0d0d0d; }
+      .ui .rail { position: absolute; left: 0; top: 0; bottom: 0; width: 64px; background: #f9f9f9; border-right: 2px solid #ececec; }
+      .ui .ri { position: absolute; left: 14px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+      .ui .ri i { width: 20px; height: 20px; border: 2px solid #5d5d5d; border-radius: 5px; }
+      .ui .ri i.round { border-radius: 50%; position: relative; }
+      .ui .ri i.round::after { content: ""; position: absolute; left: 7px; top: 3px; width: 5px; height: 6px; border-left: 2px solid #5d5d5d; border-bottom: 2px solid #5d5d5d; }
+      .ui .ri.home i { background: #5d5d5d; }
+      .ui .rdiv { position: absolute; left: 20px; width: 24px; border-top: 2px solid #e5e5e5; }
+      .ui .avatar { position: absolute; left: 16px; top: 548px; width: 32px; height: 32px; border-radius: 50%; background: #cfe3f7; border: 2px solid #b6d3ef; }
+      .ui .main { position: absolute; left: 64px; right: 0; top: 0; bottom: 0; }
+      .ui .page { position: absolute; inset: 0; }
+      .ui .mode { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); display: flex; padding: 4px; border-radius: 99px; background: #f0f0f0; font-size: 22px; }
+      .ui .mode span { padding: 6px 30px; border-radius: 99px; color: #5d5d5d; }
+      .ui .mode .on { background: #fff; color: #0d0d0d; font-weight: 600; box-shadow: 0 1px 3px rgb(0 0 0 / 0.12); }
+      .ui .greet { position: absolute; left: 0; right: 0; top: 210px; text-align: center; font-size: 34px; }
+      .ui .input { position: absolute; left: 120px; right: 120px; top: 280px; height: 72px; border-radius: 36px; background: #fff; box-shadow: 0 0 0 2px rgb(0 0 0 / 0.06), 0 6px 16px rgb(0 0 0 / 0.05); padding: 0 32px; display: flex; align-items: center; font-size: 24px; color: #6b6b6b; }
+      .ui .pop { position: absolute; left: 12px; bottom: 64px; width: 260px; background: #fff; border: 1px solid #e5e5e5; border-radius: 16px; box-shadow: 0 10px 30px rgb(0 0 0 / 0.14); padding: 8px; }
+      .ui .pop p { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 23px; }
+      .ui .pop hr { border: 0; border-top: 1px solid #ececec; margin: 8px 0; }
+      .ui .snav { position: absolute; left: 0; top: 0; bottom: 0; width: 300px; border-right: 2px solid #ececec; padding: 20px 12px; }
+      .ui .snav .ttl { font-size: 28px; font-weight: 700; padding: 0 12px; }
+      .ui .snav .search { margin: 12px 0 10px; height: 38px; border-radius: 99px; background: #ececec; color: #6b6b6b; font-size: 20px; display: flex; align-items: center; padding: 0 16px; }
+      .ui .snav .grp { font-size: 20px; color: #6b6b6b; padding: 4px 12px; }
+      .ui .snav p.it { height: 40px; display: flex; align-items: center; padding: 0 12px; font-size: 23px; border-radius: 10px; }
+      .ui .snav p.cur { background: rgb(0 0 0 / 0.05); }
+      .ui .fly { position: absolute; left: 64px; top: 0; bottom: 0; width: 300px; background: #f9f9f9; border-right: 2px solid #ececec; box-shadow: 8px 0 24px rgb(0 0 0 / 0.06); padding: 16px 8px; }
+      .ui .fly .hd { font-size: 26px; font-weight: 600; padding: 0 12px 10px; }
+      .ui .fly .row { height: 46px; display: flex; align-items: center; gap: 10px; padding: 0 12px; font-size: 23px; border-radius: 10px; }
+      .ui .fly .grp { margin-top: 16px; font-size: 20px; color: #6b6b6b; padding: 0 12px; }
+      .ui .fly .task { padding: 8px 12px; font-size: 22px; }
+      .ui .fly .task small { display: block; font-size: 19px; color: #6b6b6b; margin-top: 2px; }
+      .ui .shade { position: absolute; inset: 0; background: rgb(0 0 0 / 0.2); }
+      .ui .modal { position: absolute; left: 360px; top: 150px; width: 600px; background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 20px 50px rgb(0 0 0 / 0.2); }
+      .ui .modal p { font-size: 26px; font-weight: 600; display: flex; justify-content: space-between; }
+      .ui .modal div { margin-top: 16px; height: 110px; border: 2px solid #e5e5e5; border-radius: 16px; padding: 14px 18px; font-size: 22px; color: #6b6b6b; }
+      .ui .ring { position: absolute; border: 4px solid var(--blue); border-radius: 14px; opacity: 0; }
+      .ui .ptr { position: absolute; width: 40px; height: 40px; opacity: 0; }
+      .path p { margin-top: 18px; display: flex; gap: 16px; align-items: center; font-size: 34px; font-weight: 700; color: var(--navy); opacity: 0.3; }
+      .path .n { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .note { margin-top: 28px; font-size: 28px; color: var(--gray); line-height: 1.4; }
+      .set { display: flex; background: #fcfcfc; }
+      .set .side { width: 250px; flex-shrink: 0; border-right: 2px solid #ececec; padding: 22px 12px; }
+      .set .side p { padding: 7px 14px; font-size: 25px; border-radius: 10px; }
+      .set .side .grp { font-size: 20px; color: #6b6b6b; }
+      .set .side .cur { background: rgb(0 0 0 / 0.05); font-weight: 600; }
+      .set .body2 { flex: 1; padding: 28px 32px; }
+      .set h4 { font-size: 34px; font-weight: 600; }
+      .set .tabs { display: flex; gap: 6px; margin-top: 12px; font-size: 22px; }
+      .set .tabs span { padding: 5px 18px; border-radius: 99px; color: #5d5d5d; }
+      .set .tabs .on { background: #ececec; color: #0d0d0d; }
+      .set h5 { margin-top: 24px; font-size: 28px; font-weight: 600; }
+      .set .desc { margin-top: 6px; font-size: 22px; line-height: 1.45; color: #5d5d5d; border-radius: 10px; padding: 4px 6px; }
+      .set .card { margin-top: 12px; border: 2px solid #ececec; border-radius: 20px; background: #fff; padding: 16px 24px; }
+      .set .card b { font-size: 26px; font-weight: 600; }
+      .set .card .ln { display: flex; justify-content: space-between; margin-top: 6px; font-size: 22px; color: #5d5d5d; }
+      .set .bar { margin-top: 12px; height: 10px; border-radius: 99px; background: #ececec; overflow: hidden; }
+      .set .bar div { height: 100%; border-radius: 99px; background: #0d0d0d; transform-origin: left center; }
+      .dlg { background: rgb(0 0 0 / 0.2); padding: 28px 0; display: flex; justify-content: center; }
+      .dlg .box { width: 760px; background: #fff; border-radius: 28px; padding: 26px 30px; box-shadow: 0 20px 50px rgb(0 0 0 / 0.15); }
+      .dlg .top { display: flex; justify-content: space-between; font-size: 30px; font-weight: 600; }
+      .dlg .inst { margin-top: 16px; border: 2px solid #e5e5e5; border-radius: 16px; padding: 14px 18px; font-size: 26px; height: 74px; }
+      .dlg .grp { margin-top: 14px; border: 2px solid #e5e5e5; border-radius: 16px; }
+      .dlg .grp p, .dlg .solo { display: flex; justify-content: space-between; align-items: center; padding: 0 18px; height: 54px; font-size: 25px; }
+      .dlg .grp p + p { border-top: 2px solid #ececec; }
+      .dlg .solo { margin-top: 10px; border: 2px solid #e5e5e5; border-radius: 16px; }
+      .dlg .val { color: #5d5d5d; border-radius: 8px; padding: 2px 8px; }
+      .dlg .adv { margin-top: 12px; font-size: 24px; padding-left: 4px; }
+      .dlg .tg { width: 52px; height: 30px; border-radius: 99px; background: #3a83f7; position: relative; }
+      .dlg .tg::after { content: ""; position: absolute; right: 4px; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: #fff; }
+      .dlg .btns { margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px; font-size: 24px; }
+      .dlg .btns span { padding: 10px 24px; border-radius: 99px; background: #f3f3f3; }
+      .dlg .btns .go { background: #0d0d0d; color: #fff; font-weight: 600; }
+      .tip { margin-top: 28px; font-size: 32px; font-weight: 700; color: var(--blue); line-height: 1.4; background: var(--soft); border-radius: 16px; padding: 18px 22px; }
+
+      /* Setup overview */
+      .steps { display: flex; gap: 48px; margin-top: 56px; }
+      .step { display: flex; align-items: center; gap: 32px; width: 640px; background: var(--soft); border-radius: 24px; padding: 36px 40px; }
+      .step .num { flex-shrink: 0; width: 88px; height: 88px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 48px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+      .step .t { font-size: 46px; font-weight: 800; color: var(--navy); letter-spacing: -0.02em; }
+      .step .d { margin-top: 8px; font-size: 34px; color: var(--gray); font-weight: 500; }
+
+      /* CTA */
+      #s7 { align-items: center; text-align: center; background: var(--soft); }
+      #s7 .credit { position: absolute; bottom: 96px; left: 0; right: 0; font-size: 36px; font-weight: 700; color: var(--navy); letter-spacing: 0.02em; }
+      #s7 .url { margin-top: 48px; display: inline-block; background: #fff; border: 3px solid var(--blue); border-radius: 18px; padding: 20px 40px; font-size: 40px; font-weight: 600; color: var(--navy); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="48.5" data-width="1920" data-height="1080">
+      <div id="tag">KNUE AI 가이드 <span class="tool">ChatGPT</span> VOL.02</div>
+      <div id="bar"></div>
+
+      <!-- 0–3.5 s: hook -->
+      <section id="s1" class="clip scene" data-start="0" data-duration="3.5" data-track-index="0">
+        <p class="eyebrow">자료를 만들다가</p>
+        <p class="h1">한도에 막혀<br />작업이 끊긴 적 있으신가요?</p>
+        <p class="stop">⏳ 다시 쓰려면 몇 시간을 기다려야 할 때</p>
+      </section>
+
+      <!-- 3.5–8.5 s: the two limits -->
+      <section id="s2" class="clip scene" data-start="3.5" data-duration="5" data-track-index="0">
+        <p class="eyebrow">Chat(일반 대화)과는 따로 계산됩니다</p>
+        <p class="h2">ChatGPT Work에는 한도가 <em>두 가지</em></p>
+        <div class="limits">
+          <div class="limit" id="l1">
+            <span class="badge" id="l1-badge">오늘 다룰 내용</span>
+            <p class="name">5시간 한도</p>
+            <p class="desc">처음 쓴 시각부터<br /><b>5시간 뒤</b> 다시 채워짐</p>
+          </div>
+          <div class="limit weekly" id="l2">
+            <p class="name">주간 한도</p>
+            <p class="desc"><b>일주일 단위</b>로<br />다시 채워짐</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8.5–13.5 s: timeline without schedule -->
+      <section id="s3" class="clip scene" data-start="8.5" data-duration="5" data-track-index="0">
+        <p class="tl-title">9시에 처음 Work를 쓰면</p>
+        <p class="tl-sub">5시간 한도 · 예시: 9시~18시 근무</p>
+        <div class="track">
+          <div class="work"><span>근무 시간</span></div>
+          <div class="cycle" id="a1" style="left: 288px; width: 480px">09~14시</div>
+          <div class="cycle alt" id="a2" style="left: 768px; width: 480px">14~19시</div>
+          <div class="axis"></div>
+          <span class="tick" style="left: 0">6시</span><span class="tick" style="left: 288px">9시</span>
+          <span class="tick" style="left: 480px">11시</span><span class="tick" style="left: 768px">14시</span>
+          <span class="tick" style="left: 960px">16시</span><span class="tick" style="left: 1152px">18시</span>
+          <span class="tick" style="left: 1440px">21시</span>
+        </div>
+        <p class="result" id="a-res">근무 시간 안에 한도 <b>2번</b></p>
+      </section>
+
+      <!-- 13.5–19.5 s: timeline with 6·11·16 schedule -->
+      <section id="s4" class="clip scene" data-start="13.5" data-duration="6" data-track-index="0">
+        <p class="tl-title">6시에 미리 시작해 두면</p>
+        <p class="tl-sub">예약 작업이 6시·11시·16시에 주기를 엽니다</p>
+        <div class="track">
+          <div class="work"><span>근무 시간</span></div>
+          <div class="cycle" id="b1" style="left: 0; width: 480px">06~11시</div>
+          <div class="cycle alt" id="b2" style="left: 480px; width: 480px">11~16시</div>
+          <div class="cycle" id="b3" style="left: 960px; width: 480px">16~21시</div>
+          <div class="reset" id="r1" style="left: 480px"></div>
+          <div class="reset" id="r2" style="left: 960px"></div>
+          <div class="axis"></div>
+          <span class="tick" style="left: 0">6시</span><span class="tick" style="left: 288px">9시</span>
+          <span class="tick" style="left: 480px">11시</span><span class="tick" style="left: 960px">16시</span>
+          <span class="tick" style="left: 1152px">18시</span><span class="tick" style="left: 1440px">21시</span>
+        </div>
+        <p class="result" id="b-res">근무 시간 안에 한도 <b>3번</b> <span class="muted" style="font-size: 34px; font-weight: 500">· 주간 한도는 그대로입니다</span></p>
+      </section>
+
+      <!-- 19.5–22.5 s: setup overview -->
+      <section id="s4b" class="clip scene" data-start="19.5" data-duration="3" data-track-index="0">
+        <p class="eyebrow">설정 방법</p>
+        <p class="h2">두 단계면 됩니다</p>
+        <div class="steps">
+          <div class="step" id="st1"><span class="num">1</span><div><p class="t">남은 양 확인하기</p><p class="d">설정 → 사용량</p></div></div>
+          <div class="step" id="st2"><span class="num">2</span><div><p class="t">주기 시작 예약하기</p><p class="d">예약 → 새 작업</p></div></div>
+        </div>
+      </section>
+
+
+      <!-- 22.5–27.5 s: where to click for usage -->
+      <section id="pa" class="clip scene" data-start="22.5" data-duration="5" data-track-index="0">
+        <div class="split">
+          <div class="text path">
+            <p class="eyebrow" style="opacity: 1; color: var(--blue); font-size: 40px; font-weight: 600; margin: 0">① 확인하기</p>
+            <p class="h2" style="font-size: 56px; opacity: 1; margin: 8px 0 12px; display: block">어디를 누르나요?</p>
+            <p id="pa-1"><span class="n">1</span>왼쪽 아래 프로필</p>
+            <p id="pa-2"><span class="n">2</span>설정</p>
+            <p id="pa-3"><span class="n">3</span>사용량</p>
+          </div>
+          <div>
+            <div class="frame">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="ui" data-layout-ignore>
+                <div class="rail"><span class="ri home" style="top: 20px"><i class=""></i></span><span class="ri " style="top: 76px"><i class=""></i></span><span class="ri " style="top: 132px"><i class="round"></i></span><span class="ri " style="top: 188px"><i class=""></i></span><span class="ri " style="top: 244px"><i class=""></i></span><span class="rdiv" style="top: 306px"></span><span class="ri" style="top: 322px"><i></i></span><span class="ri" style="top: 378px"><i></i></span><span class="avatar"></span></div>
+                <div class="main">
+                  <div class="page" id="pa-home">
+                    <div class="mode"><span class="on">Chat</span><span>Work</span></div>
+                    <p class="greet">준비되면 시작하세요.</p>
+                    <div class="input">ChatGPT에게 물어보세요</div>
+                  </div>
+                  <div class="page" id="pa-settings" style="opacity: 0">
+                    <div class="snav">
+                      <p class="ttl">설정</p>
+                      <p class="search">검색</p>
+                      <p class="grp">개인</p>
+                      <p class="it cur">일반</p><p class="it">모양</p><p class="it">알림</p><p class="it">계정</p><p class="it">⋯</p><p class="it">키보드</p><p class="it">사용량</p><p class="it">데이터 관리</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="pop" id="pa-pop">
+                  <p>개인 설정</p><p>프로필</p><p>설정</p><hr /><p>도움말 <span>›</span></p><p>로그아웃</p>
+                </div>
+                <div class="ring" id="pa-r1" style="left: 8px; top: 540px; width: 48px; height: 48px"></div>
+                <div class="ring" id="pa-r2" style="left: 16px; top: 377px; width: 252px; height: 48px"></div>
+                <div class="ring" id="pa-r3" style="left: 72px; top: 386px; width: 284px; height: 46px"></div>
+                <svg class="ptr" id="pa-p1" style="left: 40px; top: 566px" viewBox="0 0 40 40"><path d="M3 3 L3 31 L10 24 L15 36 L21 33.5 L16 22 L26 22 Z" fill="#141413" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" /></svg>
+                <svg class="ptr" id="pa-p2" style="left: 120px; top: 400px" viewBox="0 0 40 40"><path d="M3 3 L3 31 L10 24 L15 36 L21 33.5 L16 22 L26 22 Z" fill="#141413" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" /></svg>
+                <svg class="ptr" id="pa-p3" style="left: 200px; top: 410px" viewBox="0 0 40 40"><path d="M3 3 L3 31 L10 24 L15 36 L21 33.5 L16 22 L26 22 Z" fill="#141413" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" /></svg>
+              </div>
+            </div>
+            <p class="cap">실제 화면을 단순화한 그림입니다</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 27.5–32.5 s: check usage -->
+      <section id="s5" class="clip scene" data-start="27.5" data-duration="5" data-track-index="0">
+        <div class="split">
+          <div class="text">
+            <p class="eyebrow">① 확인하기</p>
+            <p class="h2" style="font-size: 60px">설정 → 사용량</p>
+            <p class="body" style="font-size: 36px; margin-top: 20px">남은 양과<br />초기화까지 남은 시간</p>
+          </div>
+          <div>
+            <div class="frame">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="set" data-layout-ignore>
+                <div class="side">
+                  <p class="grp">개인</p><p>일반</p><p>모양</p><p>알림</p><p>⋯</p><p>키보드</p><p class="cur" id="nav-usage">사용량</p><p>데이터 관리</p>
+                </div>
+                <div class="body2">
+                  <h4>사용량</h4>
+                  <div class="tabs"><span class="on">개요</span><span>사용량 분석</span></div>
+                  <h5>플랜 사용 한도</h5>
+                  <p class="desc" id="u-desc">Chat 대화는 사용량에 포함되지 않습니다.</p>
+                  <div class="card" id="u1">
+                    <b>5시간 사용 한도</b>
+                    <div class="ln"><span>3시간 12분 후 초기화됩니다</span><span>64% 남음</span></div>
+                    <div class="bar"><div style="width: 64%"></div></div>
+                  </div>
+                  <div class="card" style="margin-top: 10px" id="u2">
+                    <b>주간 사용 한도</b>
+                    <div class="ln"><span>5일 20시간 후 초기화됩니다</span><span>81% 남음</span></div>
+                    <div class="bar"><div style="width: 81%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="cap">실제 화면을 단순화한 그림입니다 · 숫자는 예시</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 32.5–37.5 s: where to click for scheduled tasks -->
+      <section id="pb" class="clip scene" data-start="32.5" data-duration="5" data-track-index="0">
+        <div class="split">
+          <div class="text path">
+            <p class="eyebrow" style="opacity: 1; color: var(--blue); font-size: 40px; font-weight: 600; margin: 0">② 예약하기</p>
+            <p class="h2" style="font-size: 56px; opacity: 1; margin: 8px 0 12px; display: block">어디를 누르나요?</p>
+            <p id="pb-1"><span class="n">1</span>왼쪽 시계 아이콘</p>
+            <p id="pb-2"><span class="n">2</span>새 작업</p>
+            <p id="pb-3"><span class="n">3</span>작업 예약 창</p>
+            <p class="note" id="pb-note" style="opacity: 1; display: block; font-weight: 500">※ 아이콘은 누르지 말고<br />마우스만 올리세요</p>
+          </div>
+          <div>
+            <div class="frame">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="ui" data-layout-ignore>
+                <div class="rail"><span class="ri home" style="top: 20px"><i class=""></i></span><span class="ri " style="top: 76px"><i class=""></i></span><span class="ri " style="top: 132px"><i class="round"></i></span><span class="ri " style="top: 188px"><i class=""></i></span><span class="ri " style="top: 244px"><i class=""></i></span><span class="rdiv" style="top: 306px"></span><span class="ri" style="top: 322px"><i></i></span><span class="ri" style="top: 378px"><i></i></span><span class="avatar"></span></div>
+                <div class="main">
+                  <div class="mode"><span>Chat</span><span class="on">Work</span></div>
+                  <p class="greet">어떤 작업을 할까요?</p>
+                  <div class="input">ChatGPT로 Work 시작</div>
+                </div>
+                <div class="fly" id="pb-fly">
+                  <p class="hd">예약</p>
+                  <p class="row">＋ 새 작업</p>
+                  <p class="grp">활성</p>
+                  <p class="task">주간 회의 준비<small>10월 27일 · 매주 월요일 오전 8:00에</small></p>
+                  <p class="grp">일시 정지됨 ›</p>
+                </div>
+                <div id="pb-dlg" style="opacity: 0">
+                  <div class="shade"></div>
+                  <div class="modal"><p>작업 예약 <span>✕</span></p><div>지침…</div></div>
+                </div>
+                <div class="ring" id="pb-r1" style="left: 10px; top: 128px; width: 44px; height: 44px"></div>
+                <div class="ring" id="pb-r2" style="left: 72px; top: 64px; width: 284px; height: 52px"></div>
+                <svg class="ptr" id="pb-p1" style="left: 40px; top: 156px" viewBox="0 0 40 40"><path d="M3 3 L3 31 L10 24 L15 36 L21 33.5 L16 22 L26 22 Z" fill="#141413" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" /></svg>
+                <svg class="ptr" id="pb-p2" style="left: 190px; top: 94px" viewBox="0 0 40 40"><path d="M3 3 L3 31 L10 24 L15 36 L21 33.5 L16 22 L26 22 Z" fill="#141413" stroke="#fff" stroke-width="2.5" stroke-linejoin="round" /></svg>
+              </div>
+            </div>
+            <p class="cap">실제 화면을 단순화한 그림입니다</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 37.5–44 s: schedule dialog -->
+      <section id="s6" class="clip scene" data-start="37.5" data-duration="6.5" data-track-index="0">
+        <div class="split">
+          <div class="text">
+            <p class="eyebrow">② 예약하기</p>
+            <p class="h2" style="font-size: 60px">작업 예약</p>
+            <p class="body" style="font-size: 36px; margin-top: 20px">평일 · 오전 6:00<br />짧은 요청 한 번</p>
+            <p class="tip" id="g-tip">한 작업에 시간은 하나<br />→ 06:00 · 11:00 · 16:00<br />세 번 만듭니다</p>
+          </div>
+          <div>
+            <div class="frame">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="dlg" data-layout-ignore>
+                <div class="box">
+                  <p class="top">작업 예약 <span style="color: #5d5d5d; font-weight: 400">✕</span></p>
+                  <p class="inst" id="g1">오늘 날짜와 요일을 한 줄로 알려 줘.</p>
+                  <div class="grp">
+                    <p>작업 반복 <span class="tg"></span></p>
+                    <p>반복 <span class="val" id="g2">평일 ⌄</span></p>
+                    <p>시간 <span class="val" id="g3">오전 6:00 ⌄</span></p>
+                    <p>반복 종료 <span class="val">종료 안 함 ⌄</span></p>
+                  </div>
+                  <p class="adv">고급 ⌃</p>
+                  <p class="solo">시간대 <span class="val">한국 표준시 ⌄</span></p>
+                  <p class="solo" id="g4">실행할 때마다 새 채팅에서 시작 <span class="tg"></span></p>
+                  <div class="btns"><span>취소</span><span class="go" id="g5">만들기</span></div>
+                </div>
+              </div>
+            </div>
+            <p class="cap">실제 화면을 단순화한 그림입니다</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 44–48.5 s: call to action -->
+      <section id="s7" class="clip scene" data-start="44" data-duration="4.5" data-track-index="0">
+        <p class="h2">내 일정에 맞는 시각 정하기와<br />단계별 따라 하기는</p>
+        <p class="url">KNUE AI 가이드 › ChatGPT › VOL.02</p>
+        <p class="body muted" style="margin-top: 28px; font-size: 34px">링크는 영상 설명란에 있습니다</p>
+        <p class="credit" id="credit">한국교원대학교 정보전산원</p>
+      </section>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const ease = "power3.out";
+      const enter = (sel, at, d = 0.45) => tl.from(sel, { opacity: 0, y: 30, duration: d, ease }, at);
+      const leave = (sel, at) => tl.to(sel, { opacity: 0, duration: 0.3, ease: "power1.in" }, at);
+      const on = "0 0 0 4px #fff, 0 0 0 9px #008cd2";
+      const off = "0 0 0 0px #fff, 0 0 0 0px #008cd2";
+
+      // Hook
+      enter("#s1 .eyebrow", 0.1); enter("#s1 .h1", 0.3); enter("#s1 .stop", 1.0);
+      leave("#s1", 3.2);
+
+      // Concept
+      enter("#s2 .eyebrow", 3.6); enter("#s2 .h2", 3.8);
+      enter("#l1", 4.3); enter("#l2", 4.8);
+      tl.from("#l1-badge", { opacity: 0, scale: 0.6, duration: 0.3, ease: "back.out(2)" }, 6.2);
+      leave("#s2", 8.2);
+
+      // Timeline A
+      enter("#s3 .tl-title", 8.6); enter("#s3 .tl-sub", 8.8);
+      tl.from("#s3 .track", { opacity: 0, duration: 0.3 }, 8.9);
+      tl.from("#a1", { scaleX: 0, duration: 0.6, ease: "power2.inOut" }, 9.3);
+      tl.from("#a2", { scaleX: 0, duration: 0.6, ease: "power2.inOut" }, 9.9);
+      enter("#a-res", 10.6);
+      leave("#s3", 13.2);
+
+      // Timeline B
+      enter("#s4 .tl-title", 13.6); enter("#s4 .tl-sub", 13.8);
+      tl.from("#s4 .track", { opacity: 0, duration: 0.3 }, 13.9);
+      tl.from("#b1", { scaleX: 0, duration: 0.5, ease: "power2.inOut" }, 14.3);
+      tl.from("#r1", { scaleY: 0, duration: 0.2 }, 14.8);
+      tl.from("#b2", { scaleX: 0, duration: 0.5, ease: "power2.inOut" }, 14.85);
+      tl.from("#r2", { scaleY: 0, duration: 0.2 }, 15.35);
+      tl.from("#b3", { scaleX: 0, duration: 0.5, ease: "power2.inOut" }, 15.4);
+      tl.to(["#r1", "#r2"], { scaleX: 2.2, duration: 0.25, yoyo: true, repeat: 1, ease: "sine.inOut" }, 15.9);
+      enter("#b-res", 16);
+      leave("#s4", 19.2);
+
+      // Setup overview
+      enter("#s4b .eyebrow", 19.6); enter("#s4b .h2", 19.8);
+      enter("#st1", 20.2); enter("#st2", 20.5);
+      leave("#s4b", 22.2);
+
+
+      // Where to click: usage
+      enter("#pa .text", 22.6); enter("#pa .frame", 22.8, 0.4);
+      tl.set("#pa-pop", { opacity: 0 }, 0);
+      const step = (row, ring, ptr, at) => {
+        tl.to(row, { opacity: 1, duration: 0.2 }, at);
+        tl.to(ring, { opacity: 1, duration: 0.2 }, at);
+        tl.fromTo(ptr, { opacity: 0, x: 24, y: 24 }, { opacity: 1, x: 0, y: 0, duration: 0.3, ease }, at);
+      };
+      step("#pa-1", "#pa-r1", "#pa-p1", 23.4);
+      tl.to("#pa-pop", { opacity: 1, duration: 0.2 }, 24.0);
+      tl.to(["#pa-r1", "#pa-p1"], { opacity: 0, duration: 0.15 }, 24.2);
+      step("#pa-2", "#pa-r2", "#pa-p2", 24.4);
+      tl.to(["#pa-pop", "#pa-r2", "#pa-p2", "#pa-home"], { opacity: 0, duration: 0.2 }, 25.1);
+      tl.to("#pa-settings", { opacity: 1, duration: 0.25 }, 25.1);
+      step("#pa-3", "#pa-r3", "#pa-p3", 25.5);
+      leave("#pa", 27.2);
+
+      // Usage (five-hour row drawn by analogy for the Business seat; the checked Pro seat has none)
+      enter("#s5 .text", 27.6); enter("#s5 .frame", 27.7, 0.4);
+      tl.to("#nav-usage", { boxShadow: on, duration: 0.2 }, 28.0);
+      tl.to("#nav-usage", { boxShadow: off, duration: 0.2 }, 28.6);
+      tl.from("#s5 .bar div", { scaleX: 0, duration: 0.6, stagger: 0.15, ease }, 28.2);
+      tl.to("#u1", { boxShadow: on, duration: 0.2 }, 28.7);
+      tl.to("#u1", { boxShadow: off, duration: 0.2 }, 30.3);
+      tl.to("#u2", { boxShadow: on, duration: 0.2 }, 30.4);
+      tl.to("#u-desc", { boxShadow: on, duration: 0.2 }, 31.3);
+      leave("#s5", 32.2);
+
+      // Where to click: scheduled tasks
+      enter("#pb .text", 32.6); enter("#pb .frame", 32.8, 0.4);
+      tl.set("#pb-fly", { opacity: 0 }, 0);
+      step("#pb-1", "#pb-r1", "#pb-p1", 33.4);
+      tl.to("#pb-fly", { opacity: 1, duration: 0.2 }, 33.9);
+      tl.to(["#pb-r1", "#pb-p1"], { opacity: 0, duration: 0.15 }, 34.1);
+      step("#pb-2", "#pb-r2", "#pb-p2", 34.3);
+      tl.to(["#pb-r2", "#pb-p2"], { opacity: 0, duration: 0.15 }, 35.1);
+      tl.to("#pb-dlg", { opacity: 1, duration: 0.25 }, 35.1);
+      tl.to("#pb-3", { opacity: 1, duration: 0.2 }, 35.2);
+      leave("#pb", 37.2);
+
+      // Schedule dialog — hold on repeat/time so the "three tasks" tip can be read
+      enter("#s6 .text", 37.6); enter("#s6 .frame", 37.8, 0.4);
+      tl.set("#g-tip", { opacity: 0 }, 0);
+      tl.to("#g1", { boxShadow: on, duration: 0.2 }, 38.3);
+      tl.to("#g1", { boxShadow: off, duration: 0.2 }, 38.9);
+      tl.to(["#g2", "#g3"], { boxShadow: on, duration: 0.2 }, 39);
+      tl.fromTo("#g-tip", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease }, 39.1);
+      tl.to(["#g2", "#g3"], { boxShadow: off, duration: 0.2 }, 41.6);
+      tl.to("#g4", { boxShadow: on, duration: 0.2 }, 41.7);
+      tl.to("#g4", { boxShadow: off, duration: 0.2 }, 42.4);
+      tl.to("#g5", { boxShadow: on, duration: 0.2 }, 42.5);
+      leave("#s6", 43.7);
+
+      // CTA
+      enter("#s7 .h2", 44.1); enter("#s7 .url", 44.5); enter("#s7 .body", 44.9);
+      enter("#credit", 45.1);
+      tl.to("#root", { opacity: 0, duration: 0.5 }, 48);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

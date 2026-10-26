@@ -7,7 +7,7 @@ when it lands. Do not guess commands from the planned stack.
 
 - Node.js 26 (verified with v26.12.0)
 - pnpm 12
-- HyperFrames CLI (for video renders): `[unknown — see HyperFrames README]`
+- HyperFrames CLI (for video renders): run via `npx hyperframes@0.8.200` (pinned; needs FFmpeg)
 
 ## Commands
 
@@ -17,7 +17,9 @@ when it lands. Do not guess commands from the planned stack.
 | Dev server | `pnpm dev` → http://localhost:4321/knue-ai-newsletter/ (Astro 7 daemonizes it; stop with `pnpm astro dev stop`) |
 | Production build | `pnpm build` (output `dist/`; fails if an issue's folder ≠ its `tool` frontmatter) |
 | Type check | `pnpm check` `[unverified — needs @astrojs/check]` |
-| Render a HyperFrames video | `[unknown]` |
+| Check a video composition | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 check` |
+| Preview frames | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 snapshot --at 3,15,30` |
+| Render a HyperFrames video | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 render -q standard -o renders/<tool>-<issue>.mp4` (gitignored) |
 | Generate email summary for an issue | `[unknown]` |
 
 ## Deploy
@@ -34,6 +36,17 @@ The workflow installs pnpm 12.14.0 and Node.js 26.12.0, installs the frozen lock
 Pull requests targeting `main` run the build job without deploying.
 Check both jobs in the Actions tab and open the production URL after a successful deployment.
 To redeploy the current `main` manually, run `gh workflow run deploy.yml --ref main`.
+
+## Video publishing
+
+Rendered MP4s are not committed or served from Pages. Upload each to YouTube (maintainer's
+channel, **unlisted**) and put the issue page link in the video description.
+
+Background music: add it in YouTube Studio → Editor → Audio from the YouTube Audio Library, or
+mux a licensed track locally (`ffmpeg -i renders/x.mp4 -i assets/audio/bgm.mp3 -map 0:v -map 1:a
+-c:v copy -c:a aac -af "afade=t=in:d=1.5,afade=t=out:st=44.5:d=2,volume=0.35" -shortest out.mp4`).
+Music files stay out of git (`video/**/assets/audio/` is ignored); record the track title and any
+required attribution in the YouTube description.
 
 ## Environment variables
 

@@ -1,7 +1,8 @@
 # Architecture
 
 Status: **partially implemented** — the Astro site, both issue tracks, React interactions, and
-GitHub Pages workflow are implemented. Email generation and video rendering remain planned.
+GitHub Pages workflow are implemented. Video compositions live in `video/<tool>/<issue>/`
+(first: Claude VOL.02). Email generation remains planned.
 
 ## Publishing flow
 
@@ -10,7 +11,7 @@ MDX issue (+ frontmatter) ──PR review──▶ merge to main
         │                                   │
         │                                   ├─▶ GitHub Actions: build web ──▶ Pages deploy
         │                                   └─▶ generate email summary ──▶ copied into school mail, sent manually
-        └─ HyperFrames composition (optional) ──▶ MP4 + poster ──▶ embedded on the web page
+        └─ HyperFrames composition (optional) ──▶ MP4 ──▶ YouTube (unlisted) ──▶ linked/embedded on the web page
 ```
 
 The MDX file is the single source of truth for an issue. The email body (short intro + link to the
@@ -44,10 +45,11 @@ Content is split by AI tool because each faculty member uses only one:
 |------|--------|-------|
 | Web framework | Astro + React islands | Static output |
 | Content | MDX content collections | One file per issue, under its track |
-| Styling | Tailwind CSS | |
+| Styling | Tailwind CSS | Fonts: Pretendard (text), D2Coding (all monospace) — same in video compositions, bundled there under `assets/fonts/` |
 | Interaction | React components used inside MDX | e.g. prompt comparison ("일반적인 질문" vs "구체적인 질문") |
 | UI walkthroughs | `src/components/mock/` (Astro + vanilla script) | `<Walkthrough>` animates `<Hl>` targets in each per-tool mockup; static fallback without JS / reduced motion |
-| Short video | HyperFrames (HTML/CSS/GSAP → MP4) | 15–60 s walkthroughs |
+| Short video | HyperFrames (HTML/CSS/GSAP → MP4) | 15–60 s intros/walkthroughs, one per track; KNUE UI colours, no school marks, captions instead of TTS |
+| Video hosting | YouTube, unlisted | Maintainer's personal channel; MP4s are not committed |
 | Advanced video | Remotion | **Deferred** — add only for a series or data-bound video need |
 | Hosting | GitHub Pages | Public. Fallback: Cloudflare Pages with the existing custom domain |
 | Automation | GitHub Actions | Build and deploy only |
@@ -67,5 +69,5 @@ Content is split by AI tool because each faculty member uses only one:
   respect `base`. Pointing the custom domain at Pages removes the subpath.
 - Pages sites are always publicly readable; on a free account the repo must also be public.
 - Limits that matter here: 100 MB per file, ~1 GB published site, ~100 GB/month bandwidth (soft).
-  Keep MP4s short and compressed; move video off Pages (or to Cloudflare) if they grow.
+  Video is hosted on YouTube, so it does not count against these limits.
 - Switch to Cloudflare Pages if a limit above bites or access control becomes necessary.
