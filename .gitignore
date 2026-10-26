@@ -8,3 +8,7 @@ dist/
 .playwright-mcp/
 # Private UI reference screenshots (may show personal account data)
 ui-reference/
+# HyperFrames working files and rendered videos (uploaded to YouTube, not committed)
+video/**/.hyperframes/
+video/**/renders/
+video/**/assets/audio/
