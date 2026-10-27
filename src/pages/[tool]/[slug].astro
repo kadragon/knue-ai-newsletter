@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 
 const { issue } = Astro.props;
 const { Content } = await render(issue);
-const { tool, vol, year, title, description, sources } = issue.data;
+const { tool, vol, year, title, description, sources, video } = issue.data;
 ---
 <Base title={title} description={description}>
   <p class="text-xs tracking-widest text-stone-500">
@@ -21,6 +21,15 @@ const { tool, vol, year, title, description, sources } = issue.data;
   </p>
   <h1 class="mt-2 text-3xl font-bold leading-snug">{title}</h1>
   <p class="mt-3 text-lg text-stone-600">{description}</p>
+  {video && (
+    <iframe
+      class="mt-8 aspect-video w-full rounded-lg border border-stone-200"
+      src={`https://www.youtube-nocookie.com/embed/${video}`}
+      title={`${title} 소개 영상`}
+      allow="encrypted-media; picture-in-picture; fullscreen"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  )}
   <article class="prose prose-stone mt-10 max-w-none prose-headings:font-bold prose-pre:bg-stone-800 prose-pre:whitespace-pre-wrap prose-table:text-sm prose-code:before:content-none prose-code:after:content-none">
     <Content />
     <section aria-labelledby="official-sources" class="mt-10 border-t border-stone-200 pt-6">
