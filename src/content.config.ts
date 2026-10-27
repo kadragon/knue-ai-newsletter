@@ -15,6 +15,8 @@ const issues = defineCollection({
     emailIntro: z.string(),
     lastVerified: z.coerce.date(),
     sources: z.array(z.string().url()),
+    // YouTube video ID of the issue's intro video, shown at the top of the guide page.
+    video: z.string().regex(/^[\w-]{11}$/).optional(),
   }),
 });
 
