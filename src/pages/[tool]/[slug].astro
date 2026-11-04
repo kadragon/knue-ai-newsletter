@@ -33,7 +33,7 @@ const { tool, vol, year, title, description, sources, video } = issue.data;
   <article class="prose prose-stone mt-10 max-w-none prose-headings:font-bold prose-pre:bg-stone-800 prose-pre:whitespace-pre-wrap prose-table:text-sm prose-code:before:content-none prose-code:after:content-none">
     <Content />
     <section aria-labelledby="official-sources" class="mt-10 border-t border-stone-200 pt-6">
-      <h2 id="official-sources">참고한 공식 자료</h2>
+      <h2 id="official-sources">참고 자료</h2>
       <ul class="text-sm [overflow-wrap:anywhere]">
         {sources.map((source) => <li><a href={source} target="_blank" rel="noopener noreferrer">{source}</a></li>)}
       </ul>

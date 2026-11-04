@@ -1,0 +1,124 @@
+---
+tool: claude
+vol: 3
+year: 2026
+title: "Claude 모델과 effort, 작업에 맞게 선택하기"
+description: "공식 벤치마크로 성능과 사용량의 관계를 살펴보고, Claude Team에서 모델과 추론 강도를 작업에 맞게 고르는 방법을 알아보세요."
+emailIntro: "이번 주제는 모델과 effort(추론 강도) 선택입니다. 높은 effort는 복잡한 문제를 푸는 데 도움이 되지만 사용 한도도 더 빨리 소모합니다. Anthropic 공식 벤치마크를 살펴보고, 학교에서 제공하는 Claude Team에서 작업에 맞게 설정하는 방법을 준비했습니다."
+lastVerified: 2026-11-04
+sources:
+  - https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings
+  - https://academy.claude.com/tutorials/choosing-the-right-claude-model
+  - https://support.claude.com/en/articles/9266767-what-is-the-team-plan
+  - https://www.anthropic.com/news/claude-opus-4-5
+  - https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work
+---
+
+import { url as siteUrl } from '../../../lib/site';
+
+{/* Benchmark values are deliberately coarse readings of the announcement's "Software engineering with effort controls" chart, visually inspected. Extended thinking is off. The announcement's 4.3 percentage-point gain compares high effort with Sonnet 4.5, not Opus medium. Do not convert output-token ratios into Team allowance ratios. Live Korean UI inspected in the maintainer's school workspace on 2026-11-04; the maintainer confirmed the reference account is Premium, while faculty guidance targets Standard seats. Authentic screenshots are cropped to exclude account data; private originals stay in ui-reference/claude/. No model or effort selection was changed. */}
+
+## 한 줄 요약
+
+**평소에는 기본 설정으로 시작하고 복잡한 작업에 모델과 effort를 높여 쓰세요.** 높은 설정은 사용 한도를 더 빨리 소모할 수 있지만 성능이 사용량에 비례해서 좋아지는 것은 아닙니다. 학교에서 제공하는 **Claude Team 일반(Standard) 좌석** 기준으로 설명합니다.
+
+## 60초 영상으로 보기
+
+<figure className="not-prose">
+  <video controls playsInline preload="none" poster={siteUrl('videos/claude/03-model-effort/poster.jpg')} aria-label="모델과 effort 설정 방법 60초 영상" className="aspect-video w-full rounded-lg border border-stone-200">
+    <source src={siteUrl('videos/claude/03-model-effort/guide.mp4')} type="video/mp4" />
+    <a href={siteUrl('videos/claude/03-model-effort/guide.mp4')}>영상 파일 열기</a>
+  </video>
+  <figcaption className="mt-2 text-sm text-stone-600">60초 · 화면 자막과 배경음악으로 보는 요약입니다. 자세한 설명과 출처는 아래 본문을 참고하세요.</figcaption>
+</figure>
+
+## 모델에 따라 얼마나 쓸 수 있나요?
+
+**오래 쓰려면 Haiku, 일상 업무는 Sonnet, 어려운 분석은 Opus를 선택하세요.** 공식 안내는 모델별 사용량 부담을 다음과 같이 구분합니다.
+
+| 모델 | 사용 한도 소모 | 이렇게 사용하세요 |
+|---|---|---|
+| **Haiku** | **적음** · 가장 가벼움 | 짧은 요약·항목 추출을 자주 할 때 |
+| **Sonnet** | **중간** | 일반 문서 작성·자료 정리의 출발점 |
+| **Opus** | **많음** | 깊은 분석·복잡한 추론이 필요할 때 |
+
+**일반 좌석에서 모델별로 ‘몇 회’ 쓸 수 있는지는 확인한 공식 자료에 공개돼 있지 않습니다.** 대화 길이·첨부 자료·effort에 따라 달라지므로 고정 횟수로 안내하기 어렵습니다. 남은 양과 초기화 시각은 **설정 → 사용량**에서 확인하세요.
+
+<small>‘적음·중간·많음’은 Anthropic의 정성적 구분이며 배수나 보장 횟수가 아닙니다. 유료 요금제에는 5시간 단위 세션 한도와 주간 한도가 적용됩니다. [모델별 사용량 안내](https://academy.claude.com/tutorials/choosing-the-right-claude-model) · [한도와 남은 사용량 확인](https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work)</small>
+
+## 1. 모델과 effort는 무엇이 다른가요?
+
+| 설정 | 뜻 | 예시 |
+|---|---|---|
+| **모델** | 작업을 맡길 AI의 종류 | Haiku, Sonnet, Opus 등 |
+| **effort(추론 강도)** | 선택한 모델이 응답을 얼마나 꼼꼼하게 처리할지 조절 | Low, Medium, High 등 |
+
+모델은 잘하는 일과 속도, 사용량이 서로 다릅니다. effort를 높이면 더 꼼꼼하게 처리하도록 유도하지만 모델 자체가 바뀌지는 않습니다.
+
+Anthropic은 **높은 effort는 시간이 더 걸리고 토큰을 더 사용하므로 한도에 더 빨리 도달한다**고 설명합니다. 토큰은 AI가 글을 읽고 생성할 때 처리하는 작은 단위입니다. 간단한 작업까지 최고 설정으로 처리하면 사용량을 불필요하게 쓸 수 있습니다. [공식 설정 안내](https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings)
+
+## 2. 공식 벤치마크에서는 어땠나요?
+
+Anthropic은 2025년 11월 Opus 4.5를 발표하며 소프트웨어 문제 500개를 푸는 **SWE-bench Verified** 평가에서 effort별 성능과 출력 토큰을 비교했습니다.
+
+| Opus 4.5 effort | 문제 해결률 | 출력 토큰 |
+|---|---:|---:|
+| Medium | 약 77% | 약 5천 개 |
+| High | 약 81% | 약 1만 1천 개 |
+
+**출력 토큰은 약 두 배로 늘었지만 해결률은 약 4%p 높아졌습니다.** 더 높은 성능을 얻는 데 추가 사용량이 필요했고, 두 수치가 같은 비율로 늘지는 않았습니다. 어려운 작업이라면 이 성능 차이가 중요할 수 있습니다.
+
+<small>출처: Anthropic, *Introducing Claude Opus 4.5*(2025-11-24)의 “Software engineering with effort controls” 그래프. 숫자는 그래프를 읽어 반올림한 근삿값이며 extended thinking을 끈 조건입니다. 과거 모델의 코딩 평가로, 현재 모델의 일반 업무 성능이나 Team 사용 한도 소진율을 뜻하지 않습니다. [공식 발표와 그래프](https://www.anthropic.com/news/claude-opus-4-5)</small>
+
+또한 이 발표에서는 Opus 4.5가 이전 Sonnet 4.5보다 적은 출력 토큰으로 높은 점수를 얻었습니다. **상위 모델이 언제나 비효율적인 것도 아닙니다.** 모델 이름만 보지 말고, 내 작업의 결과와 사용량을 함께 살펴야 합니다.
+
+## 3. 내 작업에는 무엇을 고르면 될까요?
+
+아래는 [Anthropic의 모델 선택 안내](https://academy.claude.com/tutorials/choosing-the-right-claude-model)와 effort 안내를 바탕으로 정리한 출발점입니다. 모델 메뉴에 표시되는 선택지 안에서 골라 보세요.
+
+| 작업 | 시작할 설정 |
+|---|---|
+| 짧은 문장 다듬기, 항목 추출 | **Haiku** 등 빠른 모델 + Low 또는 기본값 |
+| 일반 문서 초안, 자료 정리 | **Sonnet** 등 범용 모델 + 기본값 |
+| 여러 자료의 논리·조건 비교 | **Opus** 등 복잡한 작업용 모델 + 기본값 |
+| 기본 설정으로 풀기 어려운 다단계 분석 | 모델을 유지하고 effort를 한 단계 높여 비교 |
+
+**기본값은 모델마다 다릅니다.** Medium을 모든 모델의 기본값으로 생각하지 마세요. 일상 작업에는 Low·Medium도 유용하고 가장 어려운 작업에는 높은 effort가 도움이 될 수 있습니다.
+
+## 4. 설정하고 비교해 보기
+
+### ① 입력창 아래에서 모델 메뉴 열기
+
+새 대화 화면에서 입력창 아래 오른쪽의 **모델 이름과 노력 수준**을 누릅니다. 아래는 **Opus 5.5 · 중간**이 선택된 실제 화면입니다.
+
+<figure>
+  <img src={siteUrl('images/claude/03-model-effort/composer.png')} alt="실제 Claude 입력창. 아래 오른쪽에 Opus 5.5 중간 모델 메뉴가 있습니다." width="1330" height="282" loading="lazy" class="rounded-lg border border-stone-200" />
+  <figcaption>실제 화면 · 입력창 아래의 모델 이름을 누릅니다.</figcaption>
+</figure>
+
+### ② 모델을 고르고 ‘노력’ 메뉴 열기
+
+모델 목록에서 작업에 맞는 모델을 고릅니다. **노력** 항목을 펼치면 effort 단계가 나옵니다. 한국어 화면에서는 **낮음·중간·높음·엑스트라·최대**로 표시됩니다. **추천** 표시가 붙은 단계부터 시작하세요.
+
+<div className="grid items-start gap-6 sm:grid-cols-2">
+  <figure className="my-0">
+    <img src={siteUrl('images/claude/03-model-effort/models.png')} alt="실제 Claude 모델 목록 일부. Opus 5.5, Sonnet 5.5, Haiku 5.5 아래에 노력과 더 많은 모델 메뉴가 있습니다." width="460" height="442" loading="lazy" class="mx-auto w-full max-w-sm rounded-lg border border-stone-200" />
+    <figcaption>모델 목록 일부 · 아래의 ‘노력’에서 effort를 바꿉니다.</figcaption>
+  </figure>
+  <figure className="my-0">
+    <img src={siteUrl('images/claude/03-model-effort/effort.png')} alt="실제 Claude 노력 메뉴. 중간에 추천 표시가 있고 최대 옆에는 4배 이상 사용량 안내가 있습니다." width="650" height="390" loading="lazy" class="mx-auto w-full max-w-sm rounded-lg border border-stone-200" />
+    <figcaption>노력 단계 · Opus 5.5에서 ‘중간’이 추천으로 표시된 화면입니다.</figcaption>
+  </figure>
+</div>
+
+이 화면은 높은 노력이 **한도를 더 빨리 사용한다**고 안내하며 **최대** 옆에 <strong>‘4× 이상 사용량’</strong>을 표시합니다. 모든 모델·작업에 적용되는 고정 배수로 해석하지 말고, 현재 선택한 모델의 화면 안내를 확인하세요. 결과가 충분하면 설정을 유지하고 복잡한 추론에서 부족하면 높여 봅니다. 변경은 다음 응답부터 적용됩니다.
+
+<small>설정 화면은 2026년 11월 4일 캡처했습니다. 교수님 안내는 **Team 일반(Standard) 좌석** 기준이며 모델 목록은 관련 부분만 실었습니다. 선택 가능한 모델과 추천 단계는 업데이트에 따라 달라질 수 있습니다. Thinking 설정과 effort는 별개입니다. 일부 모델에서는 Thinking이 항상 켜져 있다는 점도 확인하세요. [설정 도움말](https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings)</small>
+
+**직접 해 보기 — 교육용 예시**
+
+공개된 행사 안내문을 넣고 “일시·장소·신청 기한을 표로 정리해 줘. 원문에 없는 정보는 ‘확인 필요’로 표시해 줘.”라고 요청해 보세요. 빠른 모델과 기본 설정으로 정확하게 정리됐다면 더 높일 필요가 없습니다.
+
+비교할 때는 답변 길이보다 **필수 정보 누락, 사실 오류, 수정에 걸린 시간**을 보세요. 결과가 부족하면 원문과 요청 조건부터 보완하고 모델과 effort는 하나씩 바꿔 봅니다.
+
+<small>2026년 11월 4일 공식 문서 확인 기준입니다. Claude Team의 사용량과 기능은 좌석·설정에 따라 달라질 수 있습니다. API 토큰·비용을 학교 계정의 남은 사용량 비율로 환산하지 마세요. [Team 요금제 안내](https://support.claude.com/en/articles/9266767-what-is-the-team-plan)</small>
