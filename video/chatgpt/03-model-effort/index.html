@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920,height=1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js">
+</script>
+<style>@font-face{font-family:Pretendard;src:url(assets/fonts/PretendardVariable.woff2)}
+*{box-sizing:border-box;margin:0}html,body{width:1920px;height:1080px;overflow:hidden;background:#f7f9fc;color:#172638;font-family:Pretendard,sans-serif}
+#root{width:1920px;height:1080px;position:relative}
+.scene{position:absolute;inset:0;padding:175px 130px 120px;background:#f7f9fc;opacity:0}
+.tag{position:absolute;top:55px;left:130px;font-size:28px;letter-spacing:2px;color:var(--accent);z-index:10;font-weight:750}
+.foot{position:absolute;bottom:38px;left:130px;font-size:28px;color:#617083;z-index:10}
+.progress{position:absolute;bottom:0;left:0;width:100%;height:10px;background:var(--accent);transform-origin:left;z-index:11}h1{font-size:86px;line-height:1.3;letter-spacing:-3px;margin:60px 0 30px}h2{font-size:62px;line-height:1.25;margin-bottom:35px;letter-spacing:-2px}p{font-size:36px;line-height:1.55}
+.lead{font-size:45px;font-weight:650;line-height:1.5}
+.accent{color:var(--accent)}
+.cards{display:flex;gap:28px;margin:42px 0}
+.card{flex:1;background:white;border:2px solid #dce3eb;border-radius:24px;padding:36px}
+.card b{display:block;font-size:42px;margin-bottom:24px}
+.card p{font-size:34px}
+.note{font-size:28px;color:#526379;line-height:1.5;margin-top:24px}
+.pill{display:inline-block;padding:12px 22px;border-radius:10px;background:var(--accent);color:white;font-size:28px;font-weight:650}table{width:100%;border-collapse:collapse;font-size:35px;margin:22px 0}td,th{text-align:left;padding:18px 24px;border-bottom:2px solid #dbe3eb}th{font-size:28px;color:#526379}td strong{font-size:43px;color:var(--accent)}
+.shot{display:block;object-fit:contain;max-width:100%;border:2px solid #d9e0e8;border-radius:18px;background:white}
+.split{display:flex;gap:65px;align-items:center}
+.split>div{flex:1}
+.step{font-size:38px;font-weight:700;margin:20px 0}
+.bench{font-size:76px;letter-spacing:-2px;font-weight:800;margin:25px 0}
+.source{font-size:28px;color:#526379;margin-top:22px}
+.arrow{color:var(--accent);padding:0 16px}
+.caption{font-size:28px;margin-top:16px;color:#526379}
+.end{border-left:8px solid var(--accent);padding:20px 35px;background:white;margin-top:40px}</style>
+</head>
+<body style="--accent:#087c60">
+<div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1920" data-height="1080">
+<audio src="assets/audio/background.wav" data-start="0" data-duration="60" data-track-index="1"></audio>
+<div class="tag">KNUE AI GUIDE / ChatGPT Work / VOL.03</div>
+<section class="scene clip" id="s0" data-start="0" data-duration="5" data-track-index="0">
+<span class="pill">Business 일반(Standard) 좌석</span>
+<h1>항상 최고 설정으로<br>써야 할까요?</h1>
+<p class="lead">필요한 품질을 얻으면서<br>
+<span class="accent">사용 한도를 오래 쓰는 방법</span>
+</p>
+</section>
+<section class="scene clip" id="s1" data-start="5" data-duration="7" data-track-index="0">
+<h2>모델과 effort는 다릅니다</h2>
+<div class="cards">
+<div class="card">
+<b>모델</b>
+<p>어떤 AI에게 맡길지<br>작업의 종류와 난도에 맞춰 선택</p>
+</div>
+<div class="card">
+<b>effort · 추론 강도</b>
+<p>얼마나 꼼꼼하게 처리할지<br>높일수록 시간·사용량 부담 증가</p>
+</div>
+</div>
+<p class="lead">effort를 높여도 다른 모델로 바뀌지는 않습니다.</p>
+</section>
+<section class="scene clip" id="s2" data-start="12" data-duration="12" data-track-index="0">
+<h2>모델에 따라 사용 가능한 양이 달라집니다</h2>
+<p>일반 좌석 · 5시간당 <b>로컬 메시지</b> 공식 추정치</p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>추정 범위</th>
+<th>권장 작업</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-6 Luna</td>
+<td>
+<strong>350~3,000회</strong>
+</td>
+<td>짧은 요약·항목 추출</td>
+</tr>
+<tr>
+<td>GPT-6.1 Terra</td>
+<td>
+<strong>35~285회</strong>
+</td>
+<td>일상 문서 작업</td>
+</tr>
+<tr>
+<td>GPT-6.1 Sol</td>
+<td>
+<strong>15~160회</strong>
+</td>
+<td>여러 자료·조건 분석</td>
+</tr>
+<tr>
+<td>GPT-6 Astra</td>
+<td>
+<strong>5~45회</strong>
+</td>
+<td>어려운 작업에 제한적으로</td>
+</tr>
+</tbody>
+</table>
+<p class="note">보장 횟수가 아닙니다. 모델 간 한도를 공유하며 effort·자료 양에 따라 달라집니다.<br>클라우드 작업은 더 많이 소모할 수 있고 주간 한도도 적용될 수 있습니다.</p>
+<p class="source">출처: OpenAI · learn.chatgpt.com/docs/pricing</p>
+</section>
+<section class="scene clip" id="s3" data-start="24" data-duration="9" data-track-index="0">
+<h2>effort를 높여도 성능이 그대로일 수 있습니다</h2>
+<p>기본 수학 과제 14종 · GPT-5 평균 정확도</p>
+<div class="cards">
+<div class="card">
+<b>Low</b>
+<div class="bench">96%</div>
+</div>
+<div class="card">
+<b>Medium</b>
+<div class="bench">97%</div>
+</div>
+<div class="card">
+<b>High</b>
+<div class="bench">97%</div>
+</div>
+</div>
+<p>이 평가에서는 Medium → High의 정확도 향상이 없었습니다.</p>
+<p class="source">Srivastava 외, Do LLMs Overthink Basic Math Reasoning? · v3 부록 L 표 9<br>과거 모델의 특정 과제 결과입니다. 현재 모델·업무 전체에 일반화할 수 없습니다.</p>
+</section>
+<section class="scene clip" id="s4" data-start="33" data-duration="8" data-track-index="0">
+<h2>① 모델 목록에서 작업에 맞게 선택</h2>
+<p class="step">입력창 오른쪽 아래 <span class="accent">모델 메뉴</span>
+</p>
+<img class="shot" src="assets/screens/models.png" style="height:490px;margin:25px auto 0">
+<p class="caption">실제 화면 일부 · 2026.11.04 캡처</p>
+</section>
+<section class="scene clip" id="s5" data-start="41" data-duration="12" data-track-index="0">
+<h2>② 특정 모델 선택 → effort 조절</h2>
+<div class="split">
+<div>
+<img class="shot" src="assets/screens/models.png" style="height:560px;margin:auto">
+</div>
+<div>
+<p class="step">예: GPT-6.1 Sol · Medium</p>
+<img class="shot" src="assets/screens/effort.png" style="width:780px">
+<p class="note">effort만 비교하려면 특정 모델부터 선택하세요.<br>‘기본’에서는 모델과 추론 수준이 함께 바뀔 수 있습니다.</p>
+</div>
+</div>
+<p class="caption">실제 화면 일부 · 사용량 안내는 일반 좌석 기준</p>
+</section>
+<section class="scene clip" id="s6" data-start="53" data-duration="7" data-track-index="0">
+<h2>기본 설정으로 시작하세요</h2>
+<div class="end">
+<p class="lead">결과가 충분하면 유지<br>복잡한 작업에서 부족하면 한 단계 상향</p>
+</div>
+<p style="margin-top:45px">자료와 요청 조건을 먼저 점검하고<br>모델과 effort는 하나씩 바꿔 보세요.</p>
+<p class="source">KNUE AI GUIDE · ChatGPT Work · VOL.03<br>공식 출처와 자세한 설명은 3주차 자료에서 확인하세요.</p>
+</section>
+<div class="foot">한국교원대학교 정보전산원 · 2026.11.04 확인 기준</div>
+<div class="progress">
+</div>
+</div>
+<script>const tl=gsap.timeline({paused:true});
+tl.set("#s0",{opacity:1},0);
+tl.from("#s0>*",{y:18,opacity:0,duration:0.45,stagger:0.06},0.1);
+tl.set("#s0",{opacity:0},5);
+tl.set("#s1",{opacity:1},5);
+tl.from("#s1>*",{y:18,opacity:0,duration:0.45,stagger:0.06},5.1);
+tl.set("#s1",{opacity:0},12);
+tl.set("#s2",{opacity:1},12);
+tl.from("#s2>*",{y:18,opacity:0,duration:0.45,stagger:0.06},12.1);
+tl.set("#s2",{opacity:0},24);
+tl.set("#s3",{opacity:1},24);
+tl.from("#s3>*",{y:18,opacity:0,duration:0.45,stagger:0.06},24.1);
+tl.set("#s3",{opacity:0},33);
+tl.set("#s4",{opacity:1},33);
+tl.from("#s4>*",{y:18,opacity:0,duration:0.45,stagger:0.06},33.1);
+tl.set("#s4",{opacity:0},41);
+tl.set("#s5",{opacity:1},41);
+tl.from("#s5>*",{y:18,opacity:0,duration:0.45,stagger:0.06},41.1);
+tl.set("#s5",{opacity:0},53);
+tl.set("#s6",{opacity:1},53);
+tl.from("#s6>*",{y:18,opacity:0,duration:0.45,stagger:0.06},53.1);
+tl.fromTo(".progress",{scaleX:0},{scaleX:1,duration:60,ease:"none"},0);window.__timelines={main:tl};
+tl.seek(0);</script>
+</body>
+</html>

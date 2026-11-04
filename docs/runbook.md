@@ -39,8 +39,18 @@ To redeploy the current `main` manually, run `gh workflow run deploy.yml --ref m
 
 ## Video publishing
 
-Rendered MP4s are not committed or served from Pages. Upload each to YouTube (maintainer's
-channel, **unlisted**) and put the issue page link in the video description.
+Small approved MP4s can be committed under `public/videos/<tool>/<issue>/guide.mp4`
+with a `poster.jpg`. Embed them in the issue MDX with native video controls, `preload="none"`,
+`playsInline`, and base-aware `siteUrl()` paths. Keep render intermediates gitignored.
+Use H.264 video, AAC audio, and `-movflags +faststart` for browser playback.
+
+VOL.03 uses an original synthesized instrumental bed. Generate it with
+`python3 video/shared/create-background.py video/<tool>/03-model-effort/assets/audio/background.wav`
+before rendering. The generator is committed; its WAV output is ignored. Captions are burned
+into the video, and the issue body provides the detailed text equivalent.
+
+For larger videos, upload to YouTube (maintainer's channel, **unlisted**) and put the issue page
+link in the video description. Existing YouTube frontmatter embeds remain supported.
 
 Background music: add it in YouTube Studio → Editor → Audio from the YouTube Audio Library, or
 mux a licensed track locally (`ffmpeg -i renders/x.mp4 -i assets/audio/bgm.mp3 -map 0:v -map 1:a

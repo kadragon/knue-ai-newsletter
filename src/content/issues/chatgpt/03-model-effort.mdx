@@ -1,0 +1,116 @@
+---
+tool: chatgpt
+vol: 3
+year: 2026
+title: "ChatGPT Work 모델과 effort, 작업에 맞게 선택하기"
+description: "모델과 추론 강도의 차이를 알아보세요. 연구 결과를 살펴보며 필요한 품질을 얻으면서 사용량을 관리하는 방법을 익혀 봅니다."
+emailIntro: "이번 주제는 모델과 effort(추론 강도) 선택입니다. 어려운 작업에는 높은 설정이 도움이 되지만 모든 작업에서 사용량이 늘어난 만큼 결과가 좋아지는 것은 아닙니다. 공식 모델 선택 안내와 수학 문제 평가 연구를 살펴보고 ChatGPT Work에서 작업에 맞는 설정을 고르는 방법을 준비했습니다."
+lastVerified: 2026-11-04
+sources:
+  - https://learn.chatgpt.com/docs/models
+  - https://learn.chatgpt.com/docs/model-selection
+  - https://learn.chatgpt.com/docs/pricing
+  - https://arxiv.org/html/2507.04023v3
+---
+
+import { url as siteUrl } from '../../../lib/site';
+
+{/* Source review: official documentation and LLMThinkBench v3, Appendix L Table 9. The paper's abstract overstates the GPT-5 low-to-medium plateau; use the table's 96/97/97 values. Do not treat its response-token counts as billed reasoning tokens. Live Korean Work UI inspected in the maintainer's Chrome on 2026-11-04. Captures are authentic, cropped to exclude account data; private originals stay in ui-reference/chatgpt/. The maintainer confirmed the reference account is Premium; faculty guidance targets Standard seats. The original Default model preset was restored after inspecting Sol's effort control. */}
+
+## 한 줄 요약
+
+**평소에는 기본 설정으로 시작하고 복잡한 작업에 모델과 effort를 높여 쓰세요.** 높은 설정은 사용 한도를 더 빨리 소모할 수 있지만 결과가 그만큼 좋아진다는 보장은 없습니다. 이번 안내는 **ChatGPT Business 일반(Standard) 좌석의 Work** 기준입니다.
+
+## 60초 영상으로 보기
+
+<figure className="not-prose">
+  <video controls playsInline preload="none" poster={siteUrl('videos/chatgpt/03-model-effort/poster.jpg')} aria-label="모델과 effort 설정 방법 60초 영상" className="aspect-video w-full rounded-lg border border-stone-200">
+    <source src={siteUrl('videos/chatgpt/03-model-effort/guide.mp4')} type="video/mp4" />
+    <a href={siteUrl('videos/chatgpt/03-model-effort/guide.mp4')}>영상 파일 열기</a>
+  </video>
+  <figcaption className="mt-2 text-sm text-stone-600">60초 · 화면 자막과 배경음악으로 보는 요약입니다. 자세한 설명과 출처는 아래 본문을 참고하세요.</figcaption>
+</figure>
+
+## 모델에 따라 얼마나 쓸 수 있나요?
+
+**같은 일반 좌석이라도 모델에 따라 사용 가능한 메시지 수가 크게 달라집니다.**
+
+| 모델 | 5시간당 메시지 추정치 | 이렇게 사용하세요 |
+|---|---:|---|
+| **GPT-6 Luna** | **350~3,000회** | 짧은 요약·항목 추출을 자주 할 때 |
+| **GPT-6.1 Terra** | **35~285회** | 안내문 작성·일상 문서 작업 |
+| **GPT-6.1 Sol** | **15~160회** | 여러 자료 분석·복잡한 조건 검토 |
+| **GPT-6 Astra** | **5~45회** | Sol로 해결하기 어려울 때 제한적으로 |
+
+**일상 업무는 Terra·Sol, 간단한 반복 작업은 Luna부터 시작하세요.** Astra를 계속 쓰면 사용 한도에 빨리 도달할 수 있습니다.
+
+<small>OpenAI의 Standard Business **로컬 메시지** 공식 추정치입니다. 웹에서 보장되는 질문 횟수가 아니며 클라우드 작업은 더 많이 소모할 수 있습니다. 모델별로 별도 횟수를 받는 것이 아니라 같은 사용 한도를 나누어 씁니다. effort·자료 양·도구 사용에 따라 달라지고 주간 한도도 적용될 수 있습니다. [공식 사용량 안내](https://learn.chatgpt.com/docs/pricing)</small>
+
+## 1. 모델과 effort는 무엇이 다른가요?
+
+| 설정 | 뜻 | 선택할 때 생각할 것 |
+|---|---|---|
+| **모델** | 작업을 맡길 AI의 종류 | 간단한 정리인가요, 복잡한 판단인가요? |
+| **effort(추론 강도)** | 선택한 모델이 문제를 풀 때 얼마나 많은 추론을 할지 조절 | 빠른 초안이면 되나요, 여러 조건을 꼼꼼히 따져야 하나요? |
+
+effort를 높여도 다른 모델로 바뀌지는 않습니다. **답변 길이를 정하는 설정도 아닙니다.** 화면에 짧은 답이 나와도 내부 추론에 사용량을 쓸 수 있습니다.
+
+OpenAI는 높은 effort가 복잡한 작업에 도움이 될 수 있지만 시간이 더 걸리고 토큰도 더 쓴다고 설명합니다. **토큰**은 AI가 글을 읽고 생성할 때 처리하는 작은 단위입니다. 모델·추론·자료 양·도구 사용 등이 한도 소모에 함께 영향을 줍니다. [공식 모델 안내](https://learn.chatgpt.com/docs/models) · [사용량 안내](https://learn.chatgpt.com/docs/pricing)
+
+## 2. 더 많이 생각하면 항상 더 정확할까요?
+
+**이미 충분히 풀 수 있는 문제에서는 effort를 높여도 정확도가 그대로일 수 있습니다.**
+
+Srivastava 외 연구진의 <em>Do LLMs Overthink Basic Math Reasoning?</em>은 정렬·덧셈 등 14종의 기본 수학 과제로 모델을 평가했습니다. GPT-5의 결과는 다음과 같습니다.
+
+| GPT-5 effort | 정확도 |
+|---|---:|
+| Low | 96% |
+| Medium | 97% |
+| High | 97% |
+
+**이 평가에서는 Medium에서 High로 올려도 정확도가 높아지지 않았습니다.** 다만 기본 수학 과제의 결과이며 현재 Work 모델이나 논문 분석·글쓰기 성능을 측정한 것은 아닙니다. 어려운 문제에서도 높은 effort가 불필요하다는 뜻은 아닙니다.
+
+<small>출처: 논문 v3(2026-04-23), 부록 L 표 9. 표에 보고된 평균 정확도이며 통계적 동등성을 뜻하지 않습니다. 논문의 토큰 수치는 응답 길이를 측정하므로 숨겨진 추론을 포함한 전체 과금량이나 Work 한도 절감률로 환산하지 않았습니다. [논문 원문과 표 9](https://arxiv.org/html/2507.04023v3#A12)</small>
+
+## 3. 내 작업에는 무엇을 고르면 될까요?
+
+다음은 [OpenAI의 모델 선택 안내](https://learn.chatgpt.com/docs/model-selection)를 바탕으로 정리한 출발점입니다. 계정에서 선택할 수 있는 모델을 사용하세요.
+
+| 작업 | 시작할 모델과 effort |
+|---|---|
+| 회의 메모에서 할 일 추출, 짧은 요약 | **Luna**, 기본 설정부터 시작 |
+| 제공한 자료로 안내문 작성, 이미지 설명 | **GPT-6.1 Terra**, 기본 설정 |
+| 여러 자료를 묶어 수업 계획 초안 작성 | **GPT-6.1 Sol**, 기본 또는 Medium |
+| 서로 충돌하는 근거 비교, 복잡한 조건 검토 | **GPT-6.1 Sol**, 기본 설정에서 필요하면 effort 상향 |
+
+**모델과 effort를 한꺼번에 최고로 올리기보다, 부족한 부분을 보고 하나씩 바꿔 보세요.** 상위 모델이 재작업을 줄여 더 효율적일 때도 있습니다. 같은 이름의 effort라도 모델마다 결과와 사용량이 같지는 않습니다.
+
+## 4. 설정하고 비교해 보기
+
+### ① Work에서 모델 메뉴 열기
+
+화면 위쪽의 **Work**를 선택하고 입력창 오른쪽 아래의 **모델 선택**을 누릅니다. 이미 모델을 골랐다면 모델명과 추론 수준이 표시될 수 있습니다.
+
+
+
+### ② 모델을 고르고 추론 수준 조절하기
+
+처음 열린 작은 메뉴에서 **모델 이름**을 누르면 모델 목록이 나옵니다. 모델을 고른 뒤 슬라이더를 움직이면 해당 모델의 추론 수준을 조절할 수 있습니다. 아래는 **GPT-6.1 Sol · Medium**을 확인한 화면입니다.
+
+<div className="grid items-start gap-6 sm:grid-cols-2">
+  <figure className="my-0">
+    <img src={siteUrl('images/chatgpt/03-model-effort/models.png')} alt="실제 모델 선택 목록 일부. 기본 추천 모델 세트, GPT-6.1 Sol, GPT-6.1 Terra, GPT-6 Astra, GPT-6 Sol, GPT-6 Luna가 표시됩니다." width="504" height="572" loading="lazy" class="mx-auto w-full max-w-sm rounded-lg border border-stone-200" />
+    <figcaption>모델 목록 일부 · 맡길 작업에 맞는 모델을 고릅니다.</figcaption>
+  </figure>
+  <figure className="my-0">
+    <img src={siteUrl('images/chatgpt/03-model-effort/effort.png')} alt="실제 GPT-6.1 Sol 추론 수준 설정. Medium이 선택돼 있고 아래에 조절 슬라이더가 있습니다." width="488" height="160" loading="lazy" class="mx-auto w-full max-w-sm rounded-lg border border-stone-200" />
+    <figcaption>모델 선택 후 · 슬라이더로 effort를 조절합니다.</figcaption>
+  </figure>
+</div>
+
+**기본**은 추천 모델 세트입니다. 기본 상태의 슬라이더에서는 모델과 추론 수준이 함께 바뀔 수 있으므로, effort만 비교하려면 먼저 특정 모델을 고르세요. 익숙한 작업에서 **필수 정보 누락, 사실 오류, 수정에 걸린 시간**을 확인하고 결과가 충분하면 설정을 유지합니다.
+
+<small>설정 화면은 2026년 11월 4일 캡처했습니다. 상단 사용량 표는 교수님용 **일반(Standard) 좌석** 기준입니다. 메뉴 배치와 모델 목록은 업데이트에 따라 달라질 수 있습니다. 계정 정보와 업무 내용은 잘라냈습니다. [공식 설정 안내](https://learn.chatgpt.com/docs/models)</small>
+
+<small>2026년 11월 4일 공식 문서 확인 기준입니다. 학교 ChatGPT Business 작업 공간을 대상으로 하며 모델 제공 여부와 설정은 계정·배포 시점에 따라 달라질 수 있습니다. 벤치마크는 과거 모델의 특정 과제 결과입니다.</small>

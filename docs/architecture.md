@@ -11,7 +11,7 @@ MDX issue (+ frontmatter) ──PR review──▶ merge to main
         │                                   │
         │                                   ├─▶ GitHub Actions: build web ──▶ Pages deploy
         │                                   └─▶ generate email summary ──▶ copied into school mail, sent manually
-        └─ HyperFrames composition (optional) ──▶ MP4 ──▶ YouTube (unlisted) ──▶ linked/embedded on the web page
+        └─ HyperFrames composition (optional) ──▶ MP4 ──▶ public/videos/ or YouTube (unlisted) ──▶ embedded on the web page
 ```
 
 The MDX file is the single source of truth for an issue. The email body (short intro + link to the
@@ -49,7 +49,7 @@ Content is split by AI tool because each faculty member uses only one:
 | Interaction | React components used inside MDX | e.g. prompt comparison ("일반적인 질문" vs "구체적인 질문") |
 | UI walkthroughs | `src/components/mock/` (Astro + vanilla script) | `<Walkthrough>` animates `<Hl>` targets in each per-tool mockup; static fallback without JS / reduced motion |
 | Short video | HyperFrames (HTML/CSS/GSAP → MP4) | 15–60 s intros/walkthroughs, one per track; KNUE UI colours, no school marks, captions instead of TTS |
-| Video hosting | YouTube, unlisted | Maintainer's personal channel; MP4s are not committed |
+| Video hosting | GitHub Pages for small MP4s; YouTube for larger videos | Approved final MP4s and posters live in `public/videos/<tool>/<issue>/`; render intermediates stay ignored |
 | Advanced video | Remotion | **Deferred** — add only for a series or data-bound video need |
 | Hosting | GitHub Pages | Public. Fallback: Cloudflare Pages with the existing custom domain |
 | Automation | GitHub Actions | Build and deploy only |
@@ -69,5 +69,5 @@ Content is split by AI tool because each faculty member uses only one:
   respect `base`. Pointing the custom domain at Pages removes the subpath.
 - Pages sites are always publicly readable; on a free account the repo must also be public.
 - Limits that matter here: 100 MB per file, ~1 GB published site, ~100 GB/month bandwidth (soft).
-  Video is hosted on YouTube, so it does not count against these limits.
+  Locally hosted videos count against these limits; use YouTube for larger videos.
 - Switch to Cloudflare Pages if a limit above bites or access control becomes necessary.
