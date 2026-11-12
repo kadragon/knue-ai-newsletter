@@ -16,7 +16,7 @@ when it lands. Do not guess commands from the planned stack.
 | Install | `pnpm install` |
 | Dev server | `pnpm dev` → http://localhost:4321/knue-ai-newsletter/ (Astro 7 daemonizes it; stop with `pnpm astro dev stop`) |
 | Production build | `pnpm build` (output `dist/`; fails if an issue's folder ≠ its `tool` frontmatter) |
-| Type check | `pnpm check` `[unverified — needs @astrojs/check]` |
+| Type check | `pnpm check` (runs in CI before build; `astro check` needs TypeScript 6 — it rejects 7.x) |
 | Check a video composition | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 check` |
 | Preview frames | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 snapshot --at 3,15,30` |
 | Render a HyperFrames video | in `video/<tool>/<issue>/`: `npx hyperframes@0.8.200 render -q standard -o renders/<tool>-<issue>.mp4` (gitignored) |
@@ -31,7 +31,7 @@ when it lands. Do not guess commands from the planned stack.
 
 Production URL: https://kadragon.github.io/knue-ai-newsletter/
 
-The workflow installs pnpm 12.14.0 and Node.js 26.12.0, installs the frozen lockfile, builds
+The workflow installs pnpm 12.14.0 and Node.js 26.12.0, installs the frozen lockfile, runs `pnpm check`, builds
 `dist/`, and uploads it as the Pages artifact. Deployment uses the `github-pages` environment.
 Pull requests targeting `main` run the build job without deploying.
 Check both jobs in the Actions tab and open the production URL after a successful deployment.
