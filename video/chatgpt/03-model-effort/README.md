@@ -3,9 +3,9 @@
 60-second, 1920×1080, 30 fps caption-led video. Burned-in captions and an original quiet instrumental bed; no narration.
 
 - Content source: `src/content/issues/chatgpt/03-model-effort.mdx`.
-- Authentic screen crops: `public/images/chatgpt/03-model-effort/`, captured on 2026-11-04 with the maintainer's Premium account. Allowance guidance targets faculty Standard seats.
+- Authentic screen crops: `public/images/chatgpt/03-model-effort/`, captured on 2026-11-04 with the maintainer's Pro seat in the KNUE Business workspace. Allowance guidance targets faculty Standard seats (see `docs/plan-facts.md`).
 - Screenshots are copied into `assets/screens/` for standalone rendering; refresh them when the issue screenshots change.
-- The Claude model-list crop excludes the unavailable model. No model-specific message quota is invented.
+- The ChatGPT model-list crop shows part of the menu; GPT-6 Astra stays visible because faculty can use it within a tight limit. No model-specific message quota is invented.
 - Numerical benchmark results retain the original task/model scope; they are not subscription allowance multipliers.
 
 ## Render
