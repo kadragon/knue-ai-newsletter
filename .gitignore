@@ -12,3 +12,5 @@ ui-reference/
 video/**/.hyperframes/
 video/**/renders/
 video/**/assets/audio/
+# Local agent maintenance stamp
+.agents/.maintenance-stamp
