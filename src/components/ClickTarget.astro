@@ -1,0 +1,20 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  // Target bounds as percentages of the screenshot, in left, top, width, height order.
+  bounds: [number, number, number, number];
+  loading?: 'eager' | 'lazy';
+}
+const { src, alt, bounds: [left, top, width, height], loading } = Astro.props;
+---
+<span class="shot">
+  <img {src} {alt} {loading} />
+  <span aria-hidden="true" class="target" style={{ left: left + '%', top: top + '%', width: width + '%', height: height + '%' }}></span>
+</span>
+
+<style>
+  .shot { display: block; position: relative; width: fit-content; max-width: 100%; }
+  .shot img { display: block; max-width: 100%; height: auto; margin: 0; border-radius: .5rem; }
+  .target { position: absolute; outline: 2px solid #d22323; border-radius: .25rem; pointer-events: none; }
+</style>
